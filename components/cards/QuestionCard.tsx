@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { formatDateString } from "@/lib/utils";
-import DeleteThread from "../forms/DeleteThread";
+import DeleteQuestion from "../forms/DeleteQuestion";
 
 interface Props {
   id: string;
@@ -28,7 +28,7 @@ interface Props {
   isComment?: boolean;
 }
 
-function ThreadCard({
+function QuestionCard({
   id,
   currentUserId,
   parentId,
@@ -78,7 +78,7 @@ function ThreadCard({
                   height={24}
                   className='cursor-pointer object-contain'
                 />
-                <Link href={`/thread/${id}`}>
+                <Link href={`/questions/${id}`}>
                   <Image
                     src='/assets/reply.svg'
                     alt='heart'
@@ -114,7 +114,7 @@ function ThreadCard({
           </div>
         </div>
 
-        <DeleteThread
+        <DeleteQuestion
           threadId={JSON.stringify(id)}
           currentUserId={currentUserId}
           authorId={author.id}
@@ -143,7 +143,7 @@ function ThreadCard({
           </Link>
         </div>
       )}
-      
+
       {!isComment && community && (
         <Link
           href={`/communities/${community.id}`}
@@ -162,9 +162,9 @@ function ThreadCard({
             className='ml-1 rounded-full object-cover'
           />
         </Link>
-      )}      
+      )}
     </article>
   );
 }
 
-export default ThreadCard;
+export default QuestionCard;

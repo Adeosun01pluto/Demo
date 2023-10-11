@@ -10,6 +10,11 @@ export const sidebarLinks = [
       label: "Search",
     },
     {
+      imgURL: "/assets/search.svg",
+      route: "/questions",
+      label: "Questions",
+    },
+    {
       imgURL: "/assets/heart.svg",
       route: "/activity",
       label: "Activity",
