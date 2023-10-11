@@ -16,7 +16,7 @@ export async function fetchQuestions(pageNumber = 1, pageSize = 20) {
     const skipAmount = (pageNumber - 1) * pageSize;
   
     // Create a query to fetch the posts that have no parent (top-level threads) (a thread that is not a comment/reply).
-    const postsQuery = Question.find({ parentId: { $in: [null, undefined] } })
+    const questionsQuery = Question.find({ parentId: { $in: [null, undefined] } })
       .sort({ createdAt: "desc" })
       .skip(skipAmount)
       .limit(pageSize)
@@ -38,15 +38,15 @@ export async function fetchQuestions(pageNumber = 1, pageSize = 20) {
       });
   
     // Count the total number of top-level posts (threads) i.e., threads that are not comments.
-    const totalPostsCount = await Question.countDocuments({
+    const totalQuestionsCount = await Question.countDocuments({
       parentId: { $in: [null, undefined] },
     }); // Get the total count of posts
   
-    const posts = await postsQuery.exec();
+    const questions = await questionsQuery.exec();
   
-    const isNext = totalPostsCount > skipAmount + posts.length;
+    const isNext = totalQuestionsCount > skipAmount + questions.length;
   
-    return { posts, isNext };
+    return { questions, isNext };
   }
   
   interface Params {
@@ -87,7 +87,7 @@ export async function fetchQuestions(pageNumber = 1, pageSize = 20) {
   
       revalidatePath(path);
     } catch (error: any) {
-      throw new Error(`Failed to create thread: ${error.message}`);
+      throw new Error(`Failed to create question: ${error.message}`);
     }
   }
 
@@ -113,7 +113,7 @@ async function fetchAllChildQuestions(threadId: string): Promise<any[]> {
       const mainThread = await Question.findById(id).populate("author community");
   
       if (!mainThread) {
-        throw new Error("Thread not found");
+        throw new Error("Question not found");
       }
   
       // Fetch all child threads and their descendants recursively
@@ -157,7 +157,7 @@ async function fetchAllChildQuestions(threadId: string): Promise<any[]> {
   
       revalidatePath(path);
     } catch (error: any) {
-      throw new Error(`Failed to delete thread: ${error.message}`);
+      throw new Error(`Failed to delete question: ${error.message}`);
     }
   }
   
@@ -199,8 +199,8 @@ async function fetchAllChildQuestions(threadId: string): Promise<any[]> {
   
       return thread;
     } catch (err) {
-      console.error("Error while fetching thread:", err);
-      throw new Error("Unable to fetch thread");
+      console.error("Error while fetching question:", err);
+      throw new Error("Unable to fetch question");
     }
   }
   
@@ -217,7 +217,7 @@ async function fetchAllChildQuestions(threadId: string): Promise<any[]> {
       const originalThread = await Question.findById(questionId);
   
       if (!originalThread) {
-        throw new Error("Thread not found");
+        throw new Error("Question not found");
       }
   
       // Create the new comment thread

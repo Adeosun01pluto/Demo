@@ -12,21 +12,21 @@ async function Page() {
      <>
       <h1 className="head-text">Questions</h1>
       <section className="text-white mt-9 flex flex-col gap-10">
-      {result.posts.length === 0 ? (
+      {result.questions.length === 0 ? (
           <p className="">No questions found</p>
         ) : (
           <>
-            {result.posts.map((post)=>(
+            {result.questions.map((question)=>(
               <QuestionCard 
-                key={post._id}
-                id={post._id}
+                key={question._id}
+                id={question._id}
                 currentuserId={user.id || ""}
-                parentId={post.parentId}
-                content={post.text}
-                author={post.author}
-                community={post.community}
-                createdAt={post.createdAt}
-                comments={post.children}
+                parentId={question.parentId}
+                content={question.text}
+                author={question.author}
+                community={question.community}
+                createdAt={question.createdAt}
+                comments={question.children}
               />
             ))}
           </>

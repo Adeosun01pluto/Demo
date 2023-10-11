@@ -136,7 +136,7 @@ function QuestionCard({
             />
           ))}
 
-          <Link href={`/thread/${id}`}>
+          <Link href={`/questions/${id}`}>
             <p className='mt-1 text-subtle-medium text-gray-1'>
               {comments.length} repl{comments.length > 1 ? "ies" : "y"}
             </p>
