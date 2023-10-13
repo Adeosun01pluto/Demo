@@ -19,6 +19,11 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { ThreadValidation } from "@/lib/validations/thread";
 import { createQuestion } from "@/lib/actions/question.action";
+import Image from "next/image";
+import { Input } from "../ui/input";
+import { useUploadThing } from "@/lib/uploadthing";
+import { ChangeEvent, useState } from "react";
+import { isBase64Image } from "@/lib/utils";
 // import { createThread } from "@/lib/actions/thread.actions";
 
 interface Props {
@@ -28,6 +33,9 @@ interface Props {
 function PostQuestion({ userId }: Props) {
   const router = useRouter();
   const pathname = usePathname();
+  const { startUpload } = useUploadThing("photos");
+  const [files, setFiles] = useState<File[]>([]);
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
 
   const { organization } = useOrganization();
 
@@ -36,19 +44,50 @@ function PostQuestion({ userId }: Props) {
     defaultValues: {
       thread: "",
       accountId: userId,
+      picture: "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
+    setIsLoading(true)
+    const blob = values.picture;
+    let fileUrls: string[] | null = null; // Initialize as null
+    const hasImageChanged = isBase64Image(blob);
+    if (hasImageChanged) {
+      const imgRes = await startUpload(files);
+      if (imgRes && imgRes[0].fileUrl) {
+        fileUrls = imgRes.map((item) => item.fileUrl);
+      }
+    }
     await createQuestion({
       text: values.thread,
       author: userId,
     //   communityId: organization ? organization.id : null,
       communityId: null,
       path: pathname,
+      photos: fileUrls,
     });
-
+    setIsLoading(true)
     router.push("/questions");
+  };
+  const handleImage = (e:ChangeEvent<HTMLInputElement>, fieldChange:(value:string)=>void) => {
+    e.preventDefault();
+    const fileReader = new FileReader
+    
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setFiles(Array.from(e.target.files));
+
+      if (!file.type.includes("image")) return;
+
+      fileReader.onload = async (event) => {
+        const imageDataUrl = event.target?.result?.toString() || "";
+        fieldChange(imageDataUrl);
+      };
+
+      fileReader.readAsDataURL(file);
+    }
+
   };
 
   return (
@@ -72,9 +111,48 @@ function PostQuestion({ userId }: Props) {
             </FormItem>
           )}
         />
+                <FormField
+          control={form.control}
+          name='picture'
+          render={({ field }) => (
+            <FormItem className='flex items-center gap-4'>
+              <FormLabel className=''>
+                {field.value ? (
+                  <Image
+                    src={field.value}
+                    alt='profile_icon'
+                    width={20}
+                    height={20}
+                    priority
+                    className='rounded-full object-contain'
+                  />
+                ) : (
+                  <Image
+                    src='/assets/profile.svg'
+                    alt='profile_icon'
+                    width={24}
+                    height={24}
+                    className='object-contain'
+                  />
+                )}
+              </FormLabel>
+              <FormControl className='flex-1 text-base-semibold text-gray-200'>
+                <Input
+                  type='file'
+                  accept='image/*'
+                  multiple
+                  placeholder='Add profile photo'
+                  className='account-form_image-input'
+                  onChange={(e) => handleImage(e, field.onChange)}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
-        <Button type='submit' className='bg-primary-500'>
-          Post Question
+
+        <Button type='submit' className={`${isLoading? "" : "bg-primary-500"} `}>
+          {isLoading? "Loading" : "Post Question"}
         </Button>
       </form>
     </Form>

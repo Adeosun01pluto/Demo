@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 interface Props {
   routeType: string;
@@ -25,8 +26,7 @@ function Searchbar({ routeType }: Props) {
     }, 300);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [search, routeType]);
-
+  }, [search, router]);
   return (
     <div className='searchbar'>
       <Image
@@ -40,9 +40,7 @@ function Searchbar({ routeType }: Props) {
         id='text'
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder={`${
-          routeType !== "/search" ? "Search communities" : "Search creators"
-        }`}
+        placeholder={`${ "Search "}`}
         className='no-focus searchbar_input'
       />
     </div>

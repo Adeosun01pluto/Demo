@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { formatDateString } from "@/lib/utils";
 import DeleteThread from "../forms/DeleteThread";
+import Content from "../forms/Content";
 
 interface Props {
   id: string;
@@ -26,6 +27,8 @@ interface Props {
     };
   }[];
   isComment?: boolean;
+  photos?:string[] | [] 
+  likes?:string[] | [] 
 }
 
 function ThreadCard({
@@ -38,6 +41,8 @@ function ThreadCard({
   createdAt,
   comments,
   isComment,
+  photos,
+  likes
 }: Props) {
   return (
     <article
@@ -60,58 +65,7 @@ function ThreadCard({
             <div className='thread-card_bar' />
           </div>
 
-          <div className='flex w-full flex-col'>
-            <Link href={`/profile/${author.id}`} className='w-fit'>
-              <h4 className='cursor-pointer text-base-semibold text-light-1'>
-                {author.name}
-              </h4>
-            </Link>
-
-            <p className='mt-2 text-small-regular text-light-2'>{content}</p>
-
-            <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
-              <div className='flex gap-3.5'>
-                <Image
-                  src='/assets/heart-gray.svg'
-                  alt='heart'
-                  width={24}
-                  height={24}
-                  className='cursor-pointer object-contain'
-                />
-                <Link href={`/thread/${id}`}>
-                  <Image
-                    src='/assets/reply.svg'
-                    alt='heart'
-                    width={24}
-                    height={24}
-                    className='cursor-pointer object-contain'
-                  />
-                </Link>
-                <Image
-                  src='/assets/repost.svg'
-                  alt='heart'
-                  width={24}
-                  height={24}
-                  className='cursor-pointer object-contain'
-                />
-                <Image
-                  src='/assets/share.svg'
-                  alt='heart'
-                  width={24}
-                  height={24}
-                  className='cursor-pointer object-contain'
-                />
-              </div>
-
-              {isComment && comments.length > 0 && (
-                <Link href={`/thread/${id}`}>
-                  <p className='mt-1 text-subtle-medium text-gray-1'>
-                    {comments.length} repl{comments.length > 1 ? "ies" : "y"}
-                  </p>
-                </Link>
-              )}
-            </div>
-          </div>
+          <Content contentType={"thread"} likes={likes} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUserId={currentUserId}/>
         </div>
 
         <DeleteThread

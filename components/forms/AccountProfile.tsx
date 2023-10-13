@@ -19,6 +19,7 @@ import { ChangeEvent, useState } from "react";
 import { isBase64Image } from "@/lib/utils";
 import { useUploadThing } from "@/lib/uploadthing";
 import { updateUser } from "@/lib/actions/user.actions";
+import { z } from "zod";
 
 interface Props {
     user: {
@@ -58,7 +59,6 @@ function AccountProfile({user, btnTitle} : Props) {
           values.profile_photo = imgRes[0].fileUrl;
         }
       }
-
       // TODO : update user profile
       await updateUser({
         name: values.name,

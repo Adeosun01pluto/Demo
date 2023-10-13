@@ -12,20 +12,20 @@ async function Page() {
   const userInfo = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
 
-  const activity = await getActivity(userInfo._id);
-
+  const activitiesWithUserInfo = await getActivity(userInfo._id);
+  console.log(activitiesWithUserInfo)
   return (
     <>
       <h1 className='head-text'>Activity</h1>
 
       <section className='mt-10 flex flex-col gap-5'>
-        {activity.length > 0 ? (
+        {activitiesWithUserInfo.length > 0 ? (
           <>
-            {activity.map((activity) => (
-              <Link key={activity._id} href={`/thread/${activity.parentId}`}>
+            {activitiesWithUserInfo.map((activitiesWithUserInfo:any) => (
+              <Link key={activitiesWithUserInfo._id} href={`/thread/${activitiesWithUserInfo?.threadId}`}>
                 <article className='activity-card'>
                   <Image
-                    src={activity.author.image}
+                    src={activitiesWithUserInfo?.userInfo?.image}
                     alt='user_logo'
                     width={20}
                     height={20}
@@ -33,9 +33,12 @@ async function Page() {
                   />
                   <p className='!text-small-regular text-light-1'>
                     <span className='mr-1 text-primary-500'>
-                      {activity.author.name}
+                      {activitiesWithUserInfo?.userInfo?.name}
                     </span>{" "}
-                    replied to your thread
+                    {activitiesWithUserInfo.type === "reply" ?
+                    "replied to your thread" : 
+                    "like your thread"
+                     }
                   </p>
                 </article>
               </Link>

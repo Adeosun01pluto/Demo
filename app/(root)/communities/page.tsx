@@ -7,6 +7,7 @@ import CommunityCard from "@/components/cards/CommunityCard";
 
 import { fetchUser } from "@/lib/actions/user.actions";
 import { fetchCommunities } from "@/lib/actions/community.actions";
+import { Button } from "@/components/ui/button";
 
 async function Page({
   searchParams,
@@ -31,6 +32,9 @@ async function Page({
 
       <div className='mt-5'>
         <Searchbar routeType='communities' />
+      </div>
+      <div className="my-3">
+        <Button className="text-white" >Create Community</Button>
       </div>
 
       <section className='mt-9 flex flex-wrap gap-4'>

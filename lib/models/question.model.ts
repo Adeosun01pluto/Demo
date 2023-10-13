@@ -14,9 +14,24 @@ const QuestionSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Community",
   },
+  likes: [
+    {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    }
+  ],
+  unlikes: [
+    {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    }
+  ],
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  photos:{
+    type: [String],
   },
   parentId: {
     type: String,

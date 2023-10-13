@@ -20,7 +20,7 @@ async function page() {
 
     return (
         <>
-            <TabsComponent _id={userInfo?._id} />        
+            <TabsComponent _id={userInfo?._id || ""} />        
         </>
     )
 }

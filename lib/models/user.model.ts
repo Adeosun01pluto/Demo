@@ -14,6 +14,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  followers: [
+    {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    }
+  ],
+  followings: [
+    {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    }
+  ],
   image: String,
   bio: String,
   threads: [
@@ -30,6 +42,18 @@ const userSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Community",
+    },
+  ],
+  activities: [
+    {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+      type: {
+        type: String,
+        enum: ["like", "reply"],
+      },
     },
   ],
 });
