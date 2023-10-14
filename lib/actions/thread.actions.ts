@@ -256,18 +256,17 @@ export async function addCommentToThread(
 
     // Save the comment thread to the database
     const savedCommentThread = await commentThread.save();
-
     // Add the comment thread's ID to the original thread's children array
     originalThread.children.push(savedCommentThread._id);
 
     // Save the updated original thread to the database
     await originalThread.save();
-   // Add the activity to the author's User Model
-   const author = await User.findById(originalThread.author); // Assuming the author's ID is stored in the original thread
-   if (author) {
-     author.activities.push({ _id: userId, type: "reply", threadId });
-     await author.save();
-   }
+  //  // Add the activity to the author's User Model
+  //  const author = await User.findById(originalThread.author); // Assuming the author's ID is stored in the original thread
+  //  if (author) {
+  //    author.activities.push({ _id: userId, type: "reply_thread", threadId });
+  //    await author.save();
+  //  }
 
     revalidatePath(path);
   } catch (err) {
@@ -348,14 +347,15 @@ export async function likeThread(threadId: string, userId: string): Promise<stri
     } else {
       // User has not liked the thread, so add the like
       thread.likes.push(userId);
+      // const author = await User.findById(userId); // Assuming the author's ID is stored in the original thread
+      // if (author) {
+      //   author.activities.push({ _id: userId, type: "like_thread", threadId});
+      //   await author.save();
+      // }
     }
 
     await thread.save();
-    const author = await User.findById(userId); // Assuming the author's ID is stored in the original thread
-    if (author) {
-      author.activities.push({ _id: userId, type: "like", threadId});
-      await author.save();
-    }
+    console.log(thread)
     return thread.likes; // Return the updated list of likes for the thread
   } catch (error : any ) {
     throw new Error(`Failed to like/unlike thread: ${error.message}`);

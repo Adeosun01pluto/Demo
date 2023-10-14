@@ -267,6 +267,12 @@ async function fetchAllChildQuestions(threadId: string): Promise<any[]> {
   
       // Save the updated original thread to the database
       await originalThread.save();
+      // // Add the activity to the author's User Model
+      // const author = await User.findById(originalThread.author); // Assuming the author's ID is stored in the original thread
+      // if (author) {
+      //   author.activities.push({ _id: userId, type: "answer_question", questionId });
+      //   await author.save();
+      // }
   
       revalidatePath(path);
     } catch (err) {
@@ -331,3 +337,34 @@ async function fetchAllChildQuestions(threadId: string): Promise<any[]> {
     }
   }
   
+
+  export async function likeQuestion(questionId: string, userId: string): Promise<string[]> {
+    try {
+      connectToDB(); // Make sure you've implemented your DB connection logic
+  
+      // Check if the user has already liked the thread
+      const question = await Question.findById(questionId);
+      if (!question) {
+        throw new Error('question not found');
+      }
+  
+      if (question.likes.includes(userId)) {
+        // User has already liked the question, so remove the like
+        question.likes.pull(userId);
+      } else {
+        // User has not liked the question, so add the like
+        question.likes.push(userId);
+        // const author = await User.findById(userId); // Assuming the author's ID is stored in the original question
+        // if (author) {
+        //   author.activities.push({ _id: userId, type: "like_question", questionId});
+        //   await author.save();
+        // }
+      }
+  
+      await question.save();
+      
+      return question.likes; // Return the updated list of likes for the question
+    } catch (error : any ) {
+      throw new Error(`Failed to like/unlike question: ${error.message}`);
+    }
+  }

@@ -154,38 +154,38 @@ export async function fetchUsers({
   }
 }
 
-export async function getActivity(userId: string) {
-  try {
-    connectToDB();
+// export async function getActivity(userId: string) {
+//   try {
+//     connectToDB();
 
-    // Find the user by userId and populate the "author" field
-    const user = await User.findOne({ _id: userId });
+//     // Find the user by userId and populate the "author" field
+//     const user = await User.findOne({ _id: userId });
 
-    if (!user) {
-      throw new Error('User not found');
-    }
+//     if (!user) {
+//       throw new Error('User not found');
+//     }
 
-    // Extract the 'activities' field from the user document
-    const { activities } = user;
+//     // Extract the 'activities' field from the user document
+//     const { activities } = user;
 
-    // Fetch user information for each activity and add it to the activities array
-    const activitiesWithUserInfo = await Promise.all(
-      activities.map(async (activity : any) => {
-        const activityId = activity._id;
-        const userInfo = await User.findById(activityId).select("name image");
-        return { ...activity.toObject(), userInfo }; // Combine activity and userInfo
-      })
-    );
+//     // Fetch user information for each activity and add it to the activities array
+//     const activitiesWithUserInfo = await Promise.all(
+//       activities.map(async (activity : any) => {
+//         const activityId = activity._id;
+//         const userInfo = await User.findById(activityId).select("name image");
+//         return { ...activity.toObject(), userInfo }; // Combine activity and userInfo
+//       })
+//     );
 
-    // console.log(activitiesWithUserInfo);
+//     // console.log(activitiesWithUserInfo);
 
-    // Return the updated 'activities' array
-    return activitiesWithUserInfo;
-  } catch (error) {
-    console.error('Error fetching activities: ', error);
-    throw error;
-  }
-}
+//     // Return the updated 'activities' array
+//     return activitiesWithUserInfo;
+//   } catch (error) {
+//     console.error('Error fetching activities: ', error);
+//     throw error;
+//   }
+// }
 
 
 export async function searchUsers({

@@ -44,18 +44,22 @@ const userSchema = new mongoose.Schema({
       ref: "Community",
     },
   ],
-  activities: [
-    {
-      _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-      type: {
-        type: String,
-        enum: ["like", "reply"],
-      },
-    },
-  ],
+  // activities: [
+  //   {
+  //     _id: {
+  //       type: mongoose.Schema.Types.ObjectId,
+  //       ref: "User",
+  //     },
+  //     type: {
+  //       type: String,
+  //       enum: ["like_thread", "reply_thread", "like_question", "answer_question"],
+  //     },
+  //     threadId: {
+  //       type: mongoose.Schema.Types.ObjectId,
+  //       ref: "Thread",
+  //     },
+  //   },
+  // ],
 });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
