@@ -17,14 +17,13 @@ async function page({ params }: { params: { id: string } }) {
 
   const userInfo = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
-
   const thread = await fetchThreadById(params.id);
   return (
     <section className='relative'>
       <div>
         <ThreadCard
           id={thread._id}
-          currentUserId={user.id}
+          currentUserId={userInfo._id}
           parentId={thread.parentId}
           content={thread.text}
           author={thread.author}
@@ -32,6 +31,7 @@ async function page({ params }: { params: { id: string } }) {
           createdAt={thread.createdAt}
           comments={thread.children}
           photos={thread.photos}
+          likes={thread.likes}
         />
       </div>
 
@@ -48,7 +48,7 @@ async function page({ params }: { params: { id: string } }) {
           <ThreadCard
             key={childItem._id}
             id={childItem._id}
-            currentUserId={user.id}
+            currentUserId={userInfo._id}
             parentId={childItem.parentId}
             content={childItem.text}
             author={childItem.author}
@@ -56,6 +56,7 @@ async function page({ params }: { params: { id: string } }) {
             createdAt={childItem.createdAt}
             comments={childItem.children}
             photos={thread.photos}
+            likes={thread.likes}
             isComment
           />
         ))}

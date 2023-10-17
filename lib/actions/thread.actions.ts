@@ -63,7 +63,12 @@ export async function fetchPosts({
         model: User,
         select: "_id name parentId image", // Select only _id and username fields of the author
       },
-    });
+    })
+    .populate({
+      path: "community",
+      model: Community,
+      select: "name profile ", // Select the "name" field from the "Community" model
+    })
 
   // Count the total number of top-level posts (threads) i.e., threads that are not comments.
   const totalPostsCount = await Thread.countDocuments({
@@ -90,16 +95,11 @@ export async function createThread({ text, author, communityId, path, photos }: 
   try {
     connectToDB();
 
-    // const communityIdObject = await Community.findOne(
-    //   { id: communityId },
-    //   { _id: 1 }
-    // );
     const createdThread = await Thread.create({
       photos: photos,
       text,
       author,
-      community: null,
-    //   community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
+      community: communityId,
     });
     await createdThread.save()
    // Update User model
@@ -107,12 +107,12 @@ export async function createThread({ text, author, communityId, path, photos }: 
       $push: { threads: createdThread._id },
     });
 
-    // if (communityIdObject) {
-    //   // Update Community model
-    //   await Community.findByIdAndUpdate(communityIdObject, {
-    //     $push: { threads: createdThread._id },
-    //   });
-    // }
+    if (communityId) {
+      // Update Community model
+      await Community.findByIdAndUpdate(communityId, {
+        $push: { threads: createdThread._id },
+      });
+    }
 
     revalidatePath(path);
   } catch (error: any) {

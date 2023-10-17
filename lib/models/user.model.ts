@@ -34,8 +34,7 @@ const userSchema = new mongoose.Schema({
       ref: "Thread",
     },
   ],
-  onboarded: {
-    type: Boolean,
+  onboarded: {    type: Boolean,
     default: false,
   },
   communities: [

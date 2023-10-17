@@ -13,14 +13,19 @@ import { fetchUser } from "@/lib/actions/user.actions";
 async function Page({ params }: { params: { id: string } }) {
   const user = await currentUser();
   if (!user) return null;
-
   const userInfo = await fetchUser(params.id);
+  const currentUserId = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
+  // console.log(userInfo.follow)
   return (
     <section>
       <ProfileHeader
+        followers={userInfo.followers}
+        followings={userInfo.followings}
         accountId={userInfo.id}
         authUserId={user.id}
+        userIdToFollow={userInfo._id}
+        currentUserId={currentUserId._id}
         name={userInfo.name}
         username={userInfo.username}
         imgUrl={userInfo.image}

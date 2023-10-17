@@ -1,5 +1,9 @@
+"use client"
 import Link from "next/link";
 import Image from "next/image";
+import { Button } from "../ui/button";
+import { Share } from "lucide-react";
+import { followUser } from "@/lib/actions/user.actions";
 
 interface Props {
   accountId: string;
@@ -9,6 +13,10 @@ interface Props {
   imgUrl: string;
   bio: string;
   type?: string;
+  userIdToFollow:string
+  currentUserId:string
+  followings:string[] | []
+  followers:string[] | []
 }
 
 function ProfileHeader({
@@ -19,7 +27,17 @@ function ProfileHeader({
   imgUrl,
   bio,
   type,
+  currentUserId,
+  userIdToFollow,
+  followers,
+  followings
 }: Props) {
+  const follow = async () =>{
+    await followUser(currentUserId, userIdToFollow)
+  }
+  // const unfollow = async () =>{
+  //   await unfollowUser(currentUserId, userIdToFollow)
+  // }
   return (
     <div className='flex w-full flex-col justify-start'>
       <div className='flex items-center justify-between'>
@@ -49,7 +67,6 @@ function ProfileHeader({
                 width={16}
                 height={16}
               />
-
               <p className='text-light-2 max-sm:hidden'>Edit</p>
             </div>
           </Link>
@@ -57,7 +74,25 @@ function ProfileHeader({
       </div>
 
       <p className='mt-6 max-w-lg text-base-regular text-light-2'>{bio}</p>
-
+      <div className='w-full justify-between h-12 flex items-center'>
+            <div className=' flex gap-3 items-center'>
+              <div className='w-24 h-8 bg-white'></div>
+              <p className='text-sm text-white font-semibold'>{5.3}K Members</p>
+            </div>
+            <div className='flex gap-2 items-center'>
+              <Share color='white' />
+              {
+                currentUserId === userIdToFollow ? 
+                null : 
+                (
+                  !followers.includes(currentUserId) ? 
+                  <Button onClick={follow} className='rounded-full bg-primary-500'>Follow</Button>
+                  :
+                  <Button onClick={follow} className='rounded-full bg-primary-500'>Unfollow</Button>
+                )
+              }
+            </div>
+      </div>
       <div className='mt-12 h-0.5 w-full bg-dark-3' />
     </div>
   );

@@ -50,7 +50,7 @@ function ThreadCard({
         isComment ? "px-0 xs:px-7" : "bg-dark-2 p-7"
       }`}
     >
-      <div className='flex items-start justify-between'>
+      <div className='flex items-start w-full justify-between'>
         <div className='flex w-full flex-1 flex-row gap-4'>
           <div className='flex flex-col items-center'>
             <Link href={`/profile/${author.id}`} className='relative h-11 w-11'>
@@ -58,13 +58,12 @@ function ThreadCard({
                 src={`${author.image}`}
                 alt='user_community_image'
                 fill
-                className='cursor-pointer rounded-full'
+                className='cursor-pointer object-cover rounded-full'
               />
             </Link>
 
             <div className='thread-card_bar' />
           </div>
-
           <Content contentType={"thread"} likes={likes} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUserId={currentUserId}/>
         </div>
 

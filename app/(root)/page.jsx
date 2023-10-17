@@ -23,7 +23,7 @@ async function Page({searchParams }) {
      <>
       <h1 className="head-text">Home</h1>
       <Searchbar routeType="/" />
-      <section className="mt-9 flex flex-col gap-4 md:gap-10">
+      <section className="mt-9 flex flex-col w-full gap-4 md:gap-10">
         {result.posts.length === 0 ? (
           <p>No threads found</p>
         ) : (

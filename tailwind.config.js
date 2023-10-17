@@ -6,6 +6,7 @@ module.exports = {
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
+    "./node_modules/tw-elements-react/dist/js/**/*.js"
   ],
   theme: {
     container: {
@@ -212,5 +213,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("tw-elements-react/dist/plugin.cjs")],
 };

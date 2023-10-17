@@ -1,4 +1,5 @@
 "use client"
+import { likeQuestion } from "@/lib/actions/question.action";
 import { likeThread } from "@/lib/actions/thread.actions";
 import { currentUser } from "@clerk/nextjs";
 import Image from "next/image"
@@ -10,20 +11,27 @@ interface Props{
     id: string;
     contentType : string
     currentUserId:string
+    isComment?: boolean | undefined
     likes?: string[] | []
 }
 
-function Action({contentType, id, currentUserId, likes }:Props) {
+function Action({contentType, id, currentUserId, likes, isComment }:Props) {
   const [likesArr, setLikesArr] = useState<string[]>(likes || [])
     const likeThreadHandle = async ()=>{
+      if(contentType==="questions"){
+        const res = await likeQuestion( id,currentUserId)
+        setLikesArr(res)
+      }
+      if(contentType==="thread"){
         const res = await likeThread( id,currentUserId)
         setLikesArr(res)
+      }
     }
     return (
     <div>
         <div className='flex gap-3.5'>
           {
-            likesArr?.includes(currentUserId) ? 
+            isComment? null : likesArr?.includes(currentUserId) ? 
             <Image
             onClick={likeThreadHandle}
             src='/assets/heart-filledin.svg'
@@ -41,7 +49,9 @@ function Action({contentType, id, currentUserId, likes }:Props) {
             className='cursor-pointer object-contain'
             />
           }
+          {isComment? null :
           <span className="text-white">{likesArr?.length}</span>
+          }
                 <Link href={`/${contentType}/${id}`}>
                   <Image
                     src='/assets/reply.svg'

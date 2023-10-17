@@ -1,6 +1,7 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import Searchbar from "@/components/shared/Searchbar";
 import { fetchQuestions } from "@/lib/actions/question.action";
+import { fetchUser } from "@/lib/actions/user.actions";
 // import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
@@ -8,13 +9,13 @@ import { redirect } from "next/navigation";
 async function Page({ searchParams }) {
   const search = typeof searchParams.q === 'string' ? searchParams.q : undefined
   const user = await currentUser()
+  const userInfo  = await fetchUser(user.id)
   const result = await fetchQuestions({
-    userId: user.id,
+    userId: userInfo._id,
     searchString: search,
     pageNumber: 1,
     pageSize: 25
   });
-
   if (!user) redirect("/sign-in")
   return (
      <>
@@ -29,14 +30,14 @@ async function Page({ searchParams }) {
               <QuestionCard 
                 key={question._id}
                 id={question._id}
-                currentuserId={user.id || ""}
+                likes={question.likes}
+                currentUserId={userInfo._id}
                 parentId={question.parentId}
                 content={question.text}
                 author={question.author}
                 community={question.community}
                 createdAt={question.createdAt}
                 comments={question.children}
-                image={question.image}
                 photos={question.photos}    
               />
 

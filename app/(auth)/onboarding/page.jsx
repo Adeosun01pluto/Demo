@@ -5,7 +5,7 @@ import { fetchUser } from "../../../lib/actions/user.actions";
 
 async function Page() {
   const user = await currentUser();
-  if (!user) return null; // to avoid typescript warnings
+  if (!user) return redirect("/sign-up")
 
   const userInfo = await fetchUser(user.id);
   if (userInfo?.onboarded) redirect("/");
@@ -21,7 +21,7 @@ async function Page() {
   return (
     <main className='mx-auto flex max-w-3xl flex-col justify-start px-10 py-20'>
       <h1 className='head-text'>Onboarding</h1>
-      <p className='text-center mt-3 text-light-2'>
+      <p className='mt-3 text-light-2'>
         Complete your profile now
       </p>
       <section className='mt-9 bg-dark-2'>

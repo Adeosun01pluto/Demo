@@ -14,10 +14,10 @@ export async function fetchUser(userId: string) {
     connectToDB();
 
     return await User.findOne({ id: userId })
-    // .populate({
-    //   path: "communities",
-    //   model: Community,
-    // });
+    .populate({
+      path: "communities",
+      model: Community,
+    });
   } catch (error: any) {
     throw new Error(`Failed to fetch user: ${error.message}`);
   }
@@ -243,3 +243,66 @@ export async function searchUsers({
     throw error;
   }
 }
+
+
+export async function followUser(currentUserId : string, userIdToFollow :string) {
+  try {
+    connectToDB();
+
+    // Check if the user to follow exists
+    const userToFollow = await User.findById(userIdToFollow);
+    if (!userToFollow) {
+      throw new Error('User to follow not found');
+    }
+
+    // Check if the current user exists
+    const currentUser = await User.findById(currentUserId);
+    if (!currentUser) {
+      throw new Error('Current user not found');
+    }
+
+    if(currentUser.followings.includes(userToFollow._id)){
+      // Add the current user to the user to follow's 'followers' list
+      userToFollow.followers.push(currentUser._id);
+      await userToFollow.save();
+    }
+
+    if(!currentUser.followings.includes(userToFollow._id)){
+      // Add the user to follow to the current user's 'followings' list
+      currentUser.followings.push(userToFollow._id);
+      await currentUser.save();
+    }
+    
+  } catch (error : any ) {
+    throw new Error(`Failed to follow user: ${error.message}`);
+  }
+}
+
+export async function unfollowUser(currentUserId : string, userIdToFollow :string) {
+  try {
+    connectToDB();
+
+    // Check if the user to follow exists
+    const userToFollow = await User.findById(userIdToFollow);
+    if (!userToFollow) {
+      throw new Error('User to follow not found');
+    }
+
+    // Check if the current user exists
+    const currentUser = await User.findById(currentUserId);
+    if (!currentUser) {
+      throw new Error('Current user not found');
+    }
+    // if(currentUser.followings)
+    // Add the user to follow to the current user's 'followings' list
+    currentUser.followings.push(userToFollow._id);
+    await currentUser.save();
+    
+    // Add the current user to the user to follow's 'followers' list
+    userToFollow.followers.push(currentUser._id);
+    await userToFollow.save();
+  } catch (error : any ) {
+    throw new Error(`Failed to follow user: ${error.message}`);
+  }
+}
+

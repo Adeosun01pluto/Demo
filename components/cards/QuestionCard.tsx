@@ -28,6 +28,7 @@ interface Props {
   }[];
   isComment?: boolean;
   photos?:string[]
+  likes?:string[]
 }
 
 function QuestionCard({
@@ -40,8 +41,10 @@ function QuestionCard({
   createdAt,
   comments,
   isComment,
-  photos
+  photos,
+  likes
 }: Props) {
+  
   return (
     <article
       className={`flex w-full flex-col rounded-xl ${
@@ -63,7 +66,7 @@ function QuestionCard({
             <div className='thread-card_bar' />
           </div>
 
-          <Content contentType={"questions"} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} />
+          <Content likes={likes} contentType={"questions"} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUserId={currentUserId}/>
 
         </div>
 

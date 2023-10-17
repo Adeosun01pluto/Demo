@@ -29,19 +29,19 @@ import { Input } from "../ui/input";
 import Image from "next/image";
 import { useUploadThing } from "@/lib/uploadthing";
 import { isBase64Image } from "@/lib/utils";
+import { createCommunityThread } from "@/lib/actions/community.actions";
 
 interface Props {
   userId: string;
+  communityId:string | null
 }
 
-function PostThread({ userId }: Props) {
+function PostThread({ userId, communityId }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const { startUpload } = useUploadThing("photos");
   const [files, setFiles] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
-
-  // const { organization } = useOrganization();
 
   const form = useForm<z.infer<typeof ThreadValidation>>({
     resolver: zodResolver(ThreadValidation),
@@ -64,15 +64,18 @@ function PostThread({ userId }: Props) {
       }
     }
     await createThread({
-      text: values.thread,
-      author: userId,
-    //   communityId: organization ? organization.id : null,
-      communityId: null,
-      photos: fileUrls,
-      path: pathname,
+        text: values.thread,
+        author: userId,
+        communityId: communityId,
+        photos: fileUrls,
+        path: pathname,
     });
     setIsLoading(false)
-    router.push("/");
+    if(communityId){
+      router.push(`/communities/${communityId}`);
+    }else{
+      router.push(`/`);
+    }
   };
   const handleImage = (e:ChangeEvent<HTMLInputElement>, fieldChange:(value:string)=>void) => {
     e.preventDefault();

@@ -24,13 +24,15 @@ import { Input } from "../ui/input";
 import { useUploadThing } from "@/lib/uploadthing";
 import { ChangeEvent, useState } from "react";
 import { isBase64Image } from "@/lib/utils";
+import { createCommunityQuestion } from "@/lib/actions/community.actions";
 // import { createThread } from "@/lib/actions/thread.actions";
 
 interface Props {
   userId: string;
+  communityId: string | null;
 }
 
-function PostQuestion({ userId }: Props) {
+function PostQuestion({ userId, communityId }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const { startUpload } = useUploadThing("photos");
@@ -60,15 +62,18 @@ function PostQuestion({ userId }: Props) {
       }
     }
     await createQuestion({
-      text: values.thread,
-      author: userId,
-    //   communityId: organization ? organization.id : null,
-      communityId: null,
-      path: pathname,
-      photos: fileUrls,
+        text: values.thread,
+        author: userId,
+        communityId,
+        path: pathname,
+        photos: fileUrls,
     });
-    setIsLoading(true)
-    router.push("/questions");
+    setIsLoading(false)
+    if(communityId){
+      router.push(`/communities/${communityId}`);
+    }else{
+      router.push(`/questions`);
+    }
   };
   const handleImage = (e:ChangeEvent<HTMLInputElement>, fieldChange:(value:string)=>void) => {
     e.preventDefault();

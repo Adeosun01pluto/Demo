@@ -8,23 +8,31 @@ interface Props {
   name: string;
   username: string;
   imgUrl: string;
-  bio: string;
+  description: string;
   members: {
     image: string;
   }[];
 }
 
-function CommunityCard({ id, name, username, imgUrl, bio, members }: Props) {
+function CommunityCard({ id, name, username, imgUrl, description, members }: Props) {
   return (
     <article className='community-card'>
       <div className='flex flex-wrap items-center gap-3'>
         <Link href={`/communities/${id}`} className='relative h-12 w-12'>
-          <Image
+          {imgUrl?
+            <Image
             src={imgUrl}
             alt='community_logo'
             fill
             className='rounded-full object-cover'
-          />
+            /> : 
+            <Image
+            src="/assets/community.svg"
+            alt='community_logo'
+            fill
+            className='rounded-full object-cover'
+            />
+          }
         </Link>
 
         <div>
@@ -35,7 +43,7 @@ function CommunityCard({ id, name, username, imgUrl, bio, members }: Props) {
         </div>
       </div>
 
-      <p className='mt-4 text-subtle-medium text-gray-1'>{bio}</p>
+      <p className='mt-4 text-subtle-medium text-gray-1'>{description}</p>
 
       <div className='mt-5 flex flex-wrap items-center justify-between gap-3'>
         <Link href={`/communities/${id}`}>

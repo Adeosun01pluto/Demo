@@ -7,36 +7,40 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 
 import { connectToDB } from "../mongoose";
-
-export async function createCommunity(
-  id: string,
-  name: string,
-  username: string,
-  image: string,
-  bio: string,
-  createdById: string // Change the parameter name to reflect it's an id
-) {
+import Question from "../models/question.model";
+import { revalidatePath } from "next/cache";
+  interface Params {
+    id: string,
+    name: string,
+    description: string,
+    username: string | null,
+    image: string,
+    createdById: string
+  }
+export async function createCommunity({
+  id,
+  name,
+  username,
+  image,
+  description,
+  createdById
+} : Params) {
   try {
     connectToDB();
-
     // Find the user with the provided unique id
-    const user = await User.findOne({ id: createdById });
-
+    const user = await User.findById(createdById);
     if (!user) {
       throw new Error("User not found"); // Handle the case if the user with the id is not found
     }
-
     const newCommunity = new Community({
-      id,
       name,
       username,
-      image,
-      bio,
+      description,
+      profile : image,
       createdBy: user._id, // Use the mongoose ID of the user
     });
-
+    
     const createdCommunity = await newCommunity.save();
-
     // Update User model
     user.communities.push(createdCommunity._id);
     await user.save();
@@ -53,7 +57,7 @@ export async function fetchCommunityDetails(id: string) {
   try {
     connectToDB();
 
-    const communityDetails = await Community.findOne({ id }).populate([
+    const communityDetails = await Community.findById(id).populate([
       "createdBy",
       {
         path: "members",
@@ -69,35 +73,31 @@ export async function fetchCommunityDetails(id: string) {
     throw error;
   }
 }
-
 export async function fetchCommunityPosts(id: string) {
   try {
     connectToDB();
-
-    const communityPosts = await Community.findById(id).populate({
-      path: "threads",
-      model: Thread,
-      populate: [
-        {
+    const communityPosts = await Thread.find({ community: id })
+      .populate({
+        path: "author",
+        model: User,
+        select: "name image id",
+      })
+      .populate({
+        path: "children",
+        model: Thread,
+        populate: {
           path: "author",
           model: User,
-          select: "name image id", // Select the "name" and "_id" fields from the "User" model
-        },
-        {
-          path: "children",
-          model: Thread,
-          populate: {
-            path: "author",
-            model: User,
-            select: "image _id", // Select the "name" and "_id" fields from the "User" model
-          },
-        },
-      ],
-    });
-
+          select: "image _id",
+      }
+    })
+    .populate({
+        path: "community",
+        model: Community,
+        select: "name profile", // Select the "name" field from the "Community" model
+    })
     return communityPosts;
   } catch (error) {
-    // Handle any errors
     console.error("Error fetching community posts:", error);
     throw error;
   }
@@ -242,19 +242,33 @@ export async function removeUserFromCommunity(
   }
 }
 
-export async function updateCommunityInfo(
-  communityId: string,
+interface Props {
   name: string,
   username: string,
-  image: string
-) {
+  communityId: string | null,
+  description: string,
+  profile: string | null
+}
+
+
+export async function updateCommunityInfo({
+  communityId,
+  name,
+  username,
+  description,
+  profile
+}: Props) {
   try {
     connectToDB();
-
+    // console.log(  communityId,
+    //   name,
+    //   username,
+    //   description,
+    //   profile)
     // Find the community by its _id and update the information
     const updatedCommunity = await Community.findOneAndUpdate(
-      { id: communityId },
-      { name, username, image }
+      { _id: communityId },
+      { name, username, profile, description }
     );
 
     if (!updatedCommunity) {
@@ -300,5 +314,80 @@ export async function deleteCommunity(communityId: string) {
   } catch (error) {
     console.error("Error deleting community: ", error);
     throw error;
+  }
+}
+
+interface Params {
+  text: string,
+  author: string,
+  communityId: string | null,
+  path: string,
+  photos: string[] | null
+}
+
+export async function createCommunityQuestion({ text, author, communityId, path, photos }: Params
+) {
+  try {
+    connectToDB();
+
+    const createdQuestion = await Question.create({
+      photos:photos,
+      text,
+      author,
+      community: communityId, // Assign communityId if provided, or leave it null for personal account
+    });
+    await createdQuestion.save()
+    // Update User model
+    await User.findByIdAndUpdate(author, {
+      $push: { threads: createdQuestion._id },
+    });
+
+    if (communityId) {
+      // Update Community model
+      await Community.findByIdAndUpdate(communityId, {
+        $push: { threads: createdQuestion._id },
+      });
+    }
+
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error(`Failed to create question: ${error.message}`);
+  }
+}
+
+interface Params {
+  text: string,
+  author: string,
+  communityId: string | null,
+  path: string,
+  photos:string[] | null 
+}
+
+export async function createCommunityThread({ text, author, communityId, path, photos }: Params
+) {
+  try {
+    connectToDB();
+
+    const createdThread = await Thread.create({
+      photos: photos,
+      text,
+      author,
+      community: communityId, // Assign communityId if provided, or leave it null for personal account
+    });
+    await createdThread.save()
+   // Update User model
+    await User.findByIdAndUpdate(author, {
+      $push: { threads: createdThread._id },
+    });
+    if (communityId) {
+      // Update Community model
+      await Community.findByIdAndUpdate(communityId, {
+        $push: { threads: createdThread._id },
+      });
+    }
+
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error(`Failed to create thread: ${error.message}`);
   }
 }

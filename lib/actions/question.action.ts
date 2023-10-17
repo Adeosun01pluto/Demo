@@ -347,7 +347,7 @@ async function fetchAllChildQuestions(threadId: string): Promise<any[]> {
       if (!question) {
         throw new Error('question not found');
       }
-  
+      console.log(questionId, userId)
       if (question.likes.includes(userId)) {
         // User has already liked the question, so remove the like
         question.likes.pull(userId);
