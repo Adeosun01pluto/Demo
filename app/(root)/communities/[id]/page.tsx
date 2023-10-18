@@ -52,7 +52,7 @@ async function page({ params }: { params: { id: string } }) {
               <p className='text-base-medium text-gray-1'>@{result.username}</p>
             </div>
           </div>
-          {userInfo._id === result.createdBy._id || (
+          {user.id === result.createdBy.id ? (
             <Link href={`/communities/edit/${params.id}`}>
               <div className='flex cursor-pointer gap-3 rounded-lg bg-dark-3 px-4 py-2'>
                 <Image
@@ -65,7 +65,7 @@ async function page({ params }: { params: { id: string } }) {
                 <p className='text-light-2 max-sm:hidden'>Edit</p>
               </div>
             </Link>
-          )}
+          ) : null}
         </div>
 
         <p className='my-2 max-w-lg text-sm text-light-2'>{result.description}</p>
@@ -134,11 +134,7 @@ async function page({ params }: { params: { id: string } }) {
                 type={tab.label}
                 accountType="User"
               />
-              {/* <ThreadsTab
-                currentUserId={user.id}
-                accountId={userInfo.id}
-                accountType='User'
-              /> */}
+
             </TabsContent>
           ))}
         </Tabs>

@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation";
 
 import { fetchCommunityPosts } from "@/lib/actions/community.actions";
-import { fetchUserPosts } from "@/lib/actions/user.actions";
+import { fetchUserPosts, fetchUserQuestions } from "@/lib/actions/user.actions";
 
 import ThreadCard from "../cards/ThreadCard";
+import QuestionCard from "../cards/QuestionCard";
 
 interface Result {
   name: string;
@@ -36,24 +37,22 @@ interface Props {
   currentUserId: string;
   accountId: string;
   accountType: string;
+  type: string;
 }
 
-async function ThreadsTab({ currentUserId, accountId, accountType }: Props) {
+async function ThreadsTab({ currentUserId, accountId, accountType, type }: Props) {
   let result: Result;
-
-  if (accountType === "Community") {
-    result = await fetchCommunityPosts(accountId);
-  } else {
-    result = await fetchUserPosts(accountId);
+  let questions: Result;
+  if (type === "Questions") {
+    questions = await fetchUserQuestions(accountId);
+  } else if (type= "Threads") {
+    result = await fetchUserPosts(currentUserId);
   }
-
-  if (!result) {
-    redirect("/");
-  }
-
   return (
     <section className='mt-9 flex flex-col gap-10'>
-      {result.threads.map((thread) => (
+      {
+        type === "Threads" ?
+      (result.threads.map((thread) => (
         <ThreadCard
           key={thread._id}
           id={thread._id}
@@ -77,7 +76,24 @@ async function ThreadsTab({ currentUserId, accountId, accountType }: Props) {
           createdAt={thread.createdAt}
           comments={thread.children}
         />
-      ))}
+      ))) : type === "Questions" ? 
+      (questions?.map((question)=>(
+        <QuestionCard 
+          key={question._id}
+          id={question._id}
+          likes={question.likes}
+          currentUserId={currentUserId}
+          parentId={question.parentId}
+          content={question.text}
+          author={question.author}
+          community={question.community}
+          createdAt={question.createdAt}
+          comments={question.children}
+          photos={question.photos}    
+        />
+      ))) : null
+
+    }
     </section>
   );
 }

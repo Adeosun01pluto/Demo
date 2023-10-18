@@ -8,6 +8,7 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 
 import { connectToDB } from "../mongoose";
+import Question from "../models/question.model";
 
 export async function fetchUser(userId: string) {
   try {
@@ -89,6 +90,35 @@ export async function fetchUserPosts(userId: string) {
       ],
     });
     return threads;
+  } catch (error) {
+    console.error("Error fetching user threads:", error);
+    throw error;
+  }
+}
+
+export async function fetchUserQuestions(userId: string) {
+  try {
+    connectToDB();  
+    console.log(userId)
+    // Find all threads authored by the user with the given userId
+    const question = await Question.find({ author: userId }).populate({
+      path: "author",
+      model: User,
+    })
+    .populate({
+      path: "community",
+      model: Community,
+    })
+    .populate({
+      path: "children", // Populate the children field
+      populate: {
+        path: "author", // Populate the author field within children
+        model: User,
+        select: "_id name parentId image", // Select only _id and username fields of the author
+      },
+    });
+
+    return question;
   } catch (error) {
     console.error("Error fetching user threads:", error);
     throw error;

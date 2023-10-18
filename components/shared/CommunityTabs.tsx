@@ -53,7 +53,6 @@ async function CommunityTabs({ currentUserId,type, communityId, accountType }: P
   let result: Result;
   let question: Result;
   let members: Members;
-  // console.log(communityId)
   if (type === "Threads") {
     result = await fetchCommunityPosts(communityId);
   } else if (type === "Questions"){
@@ -61,8 +60,6 @@ async function CommunityTabs({ currentUserId,type, communityId, accountType }: P
   } else if (type === "Members"){
     members = await fetchCommunityMembers(communityId);
   }
-
-  console.log(members)
   return (
     <section className='mt-9 flex flex-col gap-10'>
       {type === "Threads" ?

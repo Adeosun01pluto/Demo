@@ -113,7 +113,7 @@ function ProfileHeader({
                   !followersArr.includes(currentUserId) ? 
                   <Button onClick={follow} className='rounded-full bg-primary-500'>Follow</Button>
                   :
-                  <Button onClick={unfollow} className='rounded-full bg-primary-500'>Unfollow</Button>
+                  <Button onClick={unfollow} className='rounded-full border-[1px] border-primary-500'>Unfollow</Button>
                 )
               }
             </div>

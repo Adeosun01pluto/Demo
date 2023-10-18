@@ -21,7 +21,7 @@ async function page({ params }: { params: { id: string } }) {
   const question = await fetchQuestionById(params.id);
 
   return (
-    <section className='relative'>
+    <section className='relative mt-16'>
       <div>
         <QuestionCard
           id={question._id}

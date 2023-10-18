@@ -21,7 +21,7 @@ async function Page({ searchParams }) {
      <>
       <h1 className="head-text">Questions</h1>
       <Searchbar routeType="questions" />
-      <section className="text-white mt-9 flex flex-col gap-10">
+      <section className="text-white mt-3 md:mt-9 flex flex-col gap-2 md:gap-10">
       {result.questions.length === 0 ? (
           <p className="">No questions found</p>
         ) : (

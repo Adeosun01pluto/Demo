@@ -19,7 +19,7 @@ async function page({ params }: { params: { id: string } }) {
   if (!userInfo?.onboarded) redirect("/onboarding");
   const thread = await fetchThreadById(params.id);
   return (
-    <section className='relative'>
+    <section className='relative mt-16'>
       <div>
         <ThreadCard
           id={thread._id}

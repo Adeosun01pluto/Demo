@@ -42,7 +42,7 @@ function CreateCPost({currentUserId, communityId}: Props) {
             <TEModalHeader>
               {/* <!--Modal title--> */}
               <h5 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">
-                Create Post
+                {activeTab}
               </h5>
               {/* <!--Close button--> */}
               <button
@@ -73,7 +73,7 @@ function CreateCPost({currentUserId, communityId}: Props) {
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger onClick={()=>setActiveTab("create thread")}
                             className={`mx-2 ${
-                            activeTab === 'create thread' ? 'bg-gray-600' : 'bg-gray-900'
+                            activeTab === 'create thread' ? 'bg-blue-400' : 'bg-gray-900'
                             }`}
                             value="create thread"
                         >
@@ -81,7 +81,7 @@ function CreateCPost({currentUserId, communityId}: Props) {
                         </TabsTrigger>
                         <TabsTrigger onClick={()=>setActiveTab("create question")}
                             className={`mx-2 ${
-                            activeTab === 'create question' ? 'bg-gray-600' : 'bg-gray-900'
+                            activeTab === 'create question' ? 'bg-blue-400' : 'bg-gray-900'
                             }`}
                             value="create question"
                         >
@@ -89,11 +89,11 @@ function CreateCPost({currentUserId, communityId}: Props) {
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value="create thread">
-                        <h1 className="head-text">Create Thread</h1>
+                        {/* <h2 className="">Create Thread</h2> */}
                         <PostThread communityId={communityId} userId={currentUserId} />
                     </TabsContent>
                     <TabsContent value="create question">
-                        <h1 className="head-text">Create Question</h1>
+                        {/* <h2 className="">Create Question</h2> */}
                         <PostQuestion communityId={communityId} userId={currentUserId} />
                     </TabsContent>
                 </Tabs>

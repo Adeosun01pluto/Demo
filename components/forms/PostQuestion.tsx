@@ -98,7 +98,7 @@ function PostQuestion({ userId, communityId }: Props) {
   return (
     <Form {...form}>
       <form
-        className='mt-10 flex flex-col justify-start gap-10'
+        className='mt-5 flex flex-col justify-start gap-5'
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField

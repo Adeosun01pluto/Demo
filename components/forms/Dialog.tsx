@@ -114,7 +114,7 @@ function Dialog({currentUserId}: Props) {
             <TEModalHeader>
               {/* <!--Modal title--> */}
               <h5 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">
-                Create COmmunity
+                Create Community
               </h5>
               {/* <!--Close button--> */}
               <button
@@ -248,7 +248,7 @@ function Dialog({currentUserId}: Props) {
                 </form>
                 </Form>
             </TEModalBody>
-            <TEModalFooter>
+            {/* <TEModalFooter>
               <TERipple rippleColor="light">
                 <button
                   type="button"
@@ -258,7 +258,7 @@ function Dialog({currentUserId}: Props) {
                   Close
                 </button>
               </TERipple>
-            </TEModalFooter>
+            </TEModalFooter> */}
           </TEModalContent>
         </TEModalDialog>
       </TEModal>

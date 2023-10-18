@@ -17,7 +17,7 @@ async function Page({ params }: { params: { id: string } }) {
   const currentUserLogged = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
   return (
-    <section>
+    <section className="mt-16">
       <ProfileHeader
         createdAt={userInfo.createdAt}
         followers={userInfo.followers}
@@ -31,7 +31,6 @@ async function Page({ params }: { params: { id: string } }) {
         imgUrl={userInfo.image}
         bio={userInfo.bio}
       />
-
       <div className='mt-9'>
         <Tabs defaultValue='threads' className='w-full'>
           <TabsList className='tab'>
@@ -51,6 +50,11 @@ async function Page({ params }: { params: { id: string } }) {
                     {userInfo.threads.length}
                   </p>
                 )}
+                {tab.label === "Questions" && (
+                  <p className='ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2'>
+                    {userInfo.questions?.length}
+                  </p>
+                )}
               </TabsTrigger>
             ))}
           </TabsList>
@@ -60,11 +64,14 @@ async function Page({ params }: { params: { id: string } }) {
               value={tab.value}
               className='w-full text-light-1'
             >
+              {tab.label}
+
               {/* @ts-ignore */}
               <ThreadsTab
                 currentUserId={user.id}
-                accountId={userInfo.id}
+                accountId={userInfo._id}
                 accountType='User'
+                type={tab.label}
               />
             </TabsContent>
           ))}

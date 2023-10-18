@@ -34,6 +34,12 @@ const userSchema = new mongoose.Schema({
       ref: "Thread",
     },
   ],
+  questions: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Question",
+    },
+  ],
   onboarded: {    type: Boolean,
     default: false,
   },

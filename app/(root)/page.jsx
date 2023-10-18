@@ -20,11 +20,12 @@ async function Page({searchParams }) {
     pageSize: 25
   });
   if (!user) redirect("/sign-in")
+  
   return (
      <>
       <h1 className="head-text">Home</h1>
       <Searchbar routeType="/" />
-      <section className="mt-9 flex flex-col w-full gap-4 md:gap-10">
+      <section className="mt-3 md:mt-9 flex flex-col w-full gap-2 md:gap-10">
         {result.posts.length === 0 ? (
           <p>No threads found</p>
         ) : (

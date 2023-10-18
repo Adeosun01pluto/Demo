@@ -19,9 +19,9 @@ async function page() {
     if(!userInfo?.onboarded) redirect("/onboarding");
 
     return (
-        <>
+        <div className="mt-12">
             <TabsComponent _id={userInfo?._id || ""} />        
-        </>
+        </div>
     )
 }
 

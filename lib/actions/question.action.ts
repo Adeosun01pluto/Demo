@@ -102,7 +102,7 @@ export async function fetchQuestions({
       await createdQuestion.save()
       // Update User model
       await User.findByIdAndUpdate(author, {
-        $push: { threads: createdQuestion._id },
+        $push: { questions: createdQuestion._id },
       });
   
       if (communityId) {
