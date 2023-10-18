@@ -55,10 +55,10 @@ export async function fetchQuestions({
       path: "author",
       model: User,
     })
-    // .populate({
-    //   path: "community",
-    //   model: Community,
-    // })
+    .populate({
+      path: "community",
+      model: Community,
+    })
     .populate({
       path: "children", // Populate the children field
       populate: {
@@ -93,16 +93,11 @@ export async function fetchQuestions({
     try {
       connectToDB();
   
-      // const communityIdObject = await Community.findOne(
-      //   { id: communityId },
-      //   { _id: 1 }
-      // );
       const createdQuestion = await Question.create({
         photos:photos,
         text,
         author,
-        community: null,
-      //   community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
+        community: communityId, // Assign communityId if provided, or leave it null for personal account
       });
       await createdQuestion.save()
       // Update User model
@@ -110,12 +105,12 @@ export async function fetchQuestions({
         $push: { threads: createdQuestion._id },
       });
   
-      // if (communityIdObject) {
-      //   // Update Community model
-      //   await Community.findByIdAndUpdate(communityIdObject, {
-      //     $push: { threads: createdQuestion._id },
-      //   });
-      // }
+      if (communityId) {
+        // Update Community model
+        await Community.findByIdAndUpdate(communityId, {
+          $push: { questions: createdQuestion._id },
+        });
+      }
   
       revalidatePath(path);
     } catch (error: any) {

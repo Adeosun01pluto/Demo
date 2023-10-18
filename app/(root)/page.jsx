@@ -12,6 +12,7 @@ async function Page({searchParams }) {
   const search = typeof searchParams.q === 'string' ? searchParams.q : undefined
   const user = await currentUser()
   const userInfo  = await fetchUser(user?.id)
+  if(!userInfo?._id) redirect("/onboarding")
   const result = await fetchPosts({
     userId: userInfo?._id,
     searchString: search,

@@ -3,7 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { Share } from "lucide-react";
-import { followUser } from "@/lib/actions/user.actions";
+import { followUser, unfollowUser } from "@/lib/actions/user.actions";
+import { useState } from "react";
 
 interface Props {
   accountId: string;
@@ -14,6 +15,7 @@ interface Props {
   bio: string;
   type?: string;
   userIdToFollow:string
+  createdAt:string
   currentUserId:string
   followings:string[] | []
   followers:string[] | []
@@ -30,13 +32,35 @@ function ProfileHeader({
   currentUserId,
   userIdToFollow,
   followers,
-  followings
+  followings,createdAt
 }: Props) {
-  const follow = async () =>{
-    await followUser(currentUserId, userIdToFollow)
-  }
+  const [followersArr, setFollowersArr] = useState<string[]>(followers)
+  const follow = async () => {
+    if (!followersArr.includes(currentUserId)) {
+      await followUser(currentUserId, userIdToFollow);
+      // Update the followersArr state after following
+      setFollowersArr([...followersArr, currentUserId]);
+    }
+  };
+  
+  const unfollow = async () => {
+    if (followersArr.includes(currentUserId)) {
+      await unfollowUser(currentUserId, userIdToFollow);
+      // Update the followersArr state after unfollowing
+      setFollowersArr(followersArr.filter((follower) => follower !== currentUserId));
+    }
+  };
+  // const follow = async () =>{
+  //   await followUser(currentUserId, userIdToFollow)
+    
+  //   // Update the followersArr state after following
+  //   setFollowersArr([...followersArr, currentUserId]);
+  // }
   // const unfollow = async () =>{
   //   await unfollowUser(currentUserId, userIdToFollow)
+    
+  //   // Update the followersArr state after unfollowing
+  //   setFollowersArr(followersArr.filter((follower) => follower !== currentUserId));
   // }
   return (
     <div className='flex w-full flex-col justify-start'>
@@ -73,11 +97,12 @@ function ProfileHeader({
         )}
       </div>
 
-      <p className='mt-6 max-w-lg text-base-regular text-light-2'>{bio}</p>
-      <div className='w-full justify-between h-12 flex items-center'>
-            <div className=' flex gap-3 items-center'>
-              <div className='w-24 h-8 bg-white'></div>
-              <p className='text-sm text-white font-semibold'>{5.3}K Members</p>
+      <p className='my-2 max-w-lg text-base-regular text-light-2'>{bio}</p>
+      {/* <p className=' max-w-lg text-base-regular text-light-2'>Joined {createdAt}</p> */}
+      <div className='w-full justify-between flex items-center'>
+            <div className=' flex gap-2 items-center'>
+              <p className='text-xs text-white'>{followersArr.length} Followers</p>
+              <p className='text-xs text-white'>{followings.length} Followings</p>
             </div>
             <div className='flex gap-2 items-center'>
               <Share color='white' />
@@ -85,10 +110,10 @@ function ProfileHeader({
                 currentUserId === userIdToFollow ? 
                 null : 
                 (
-                  !followers.includes(currentUserId) ? 
+                  !followersArr.includes(currentUserId) ? 
                   <Button onClick={follow} className='rounded-full bg-primary-500'>Follow</Button>
                   :
-                  <Button onClick={follow} className='rounded-full bg-primary-500'>Unfollow</Button>
+                  <Button onClick={unfollow} className='rounded-full bg-primary-500'>Unfollow</Button>
                 )
               }
             </div>

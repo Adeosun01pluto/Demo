@@ -260,18 +260,13 @@ export async function followUser(currentUserId : string, userIdToFollow :string)
     if (!currentUser) {
       throw new Error('Current user not found');
     }
-
-    if(currentUser.followings.includes(userToFollow._id)){
-      // Add the current user to the user to follow's 'followers' list
-      userToFollow.followers.push(currentUser._id);
-      await userToFollow.save();
-    }
-
     if(!currentUser.followings.includes(userToFollow._id)){
       // Add the user to follow to the current user's 'followings' list
       currentUser.followings.push(userToFollow._id);
+      userToFollow.followers.push(currentUser._id);
       await currentUser.save();
-    }
+      await userToFollow.save();
+    }    
     
   } catch (error : any ) {
     throw new Error(`Failed to follow user: ${error.message}`);
@@ -293,14 +288,14 @@ export async function unfollowUser(currentUserId : string, userIdToFollow :strin
     if (!currentUser) {
       throw new Error('Current user not found');
     }
-    // if(currentUser.followings)
-    // Add the user to follow to the current user's 'followings' list
-    currentUser.followings.push(userToFollow._id);
-    await currentUser.save();
-    
-    // Add the current user to the user to follow's 'followers' list
-    userToFollow.followers.push(currentUser._id);
-    await userToFollow.save();
+    if(currentUser.followings.includes(userToFollow._id)){
+      // Add the current user to the user to follow's 'followers' list
+      userToFollow.followers.pull(currentUser._id);
+      currentUser.followings.pull(userToFollow._id);
+      await userToFollow.save();
+      await currentUser.save();
+    }
+
   } catch (error : any ) {
     throw new Error(`Failed to follow user: ${error.message}`);
   }

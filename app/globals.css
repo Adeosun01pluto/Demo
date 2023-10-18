@@ -159,6 +159,25 @@
 .comment-form_btn {
   @apply rounded-3xl bg-primary-500 px-8 py-2 !text-small-regular text-light-1 max-xs:w-full !important;
 }
-.img{
-  object-fit:scale-down;
+@keyframes vibrate {
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-6px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animation-vibrate {
+  animation: vibrate 0.9s ease infinite;
+  transition: transform 0.9s ease;
 }

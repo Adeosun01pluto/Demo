@@ -27,7 +27,7 @@ function CreateCPost({currentUserId, communityId}: Props) {
   return (
     <div>
         <div>
-      <div className=" flex items-center sm:m-2 justify-center rounded-full absolute bottom-0 right-0 w-10 h-10 z-40 bg-white">
+      <div className="animation-vibrate flex items-center sm:m-2 justify-center rounded-full absolute bottom-0 right-0 w-10 h-10 z-40 bg-white">
         {/* <!-- Button trigger modal --> */}
         <Button 
             type="button"

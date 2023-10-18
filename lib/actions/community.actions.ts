@@ -103,6 +103,55 @@ export async function fetchCommunityPosts(id: string) {
   }
 }
 
+export async function fetchCommunityQuestions(id: string) {
+  try {
+    connectToDB();
+    const communityPosts = await Question.find({ community: id })
+      .populate({
+        path: "author",
+        model: User,
+        select: "name image id",
+      })
+      .populate({
+        path: "children",
+        model: Thread,
+        populate: {
+          path: "author",
+          model: User,
+          select: "image _id",
+      }
+    })
+    .populate({
+        path: "community",
+        model: Community,
+        select: "name profile", // Select the "name" field from the "Community" model
+    })
+    return communityPosts;
+  } catch (error) {
+    console.error("Error fetching community posts:", error);
+    throw error;
+  }
+}
+
+// Create a function to fetch community members by community ID
+export async function fetchCommunityMembers(communityId :string) {
+  try {
+    // Use Mongoose to find the community by its ID
+    const community = await Community
+    .findById(communityId)
+    .populate('members', 'username name image id'); // Replace 'username' and 'name' with the fields you want to retrieve
+    
+    if (!community) {
+      throw new Error('Community not found');
+    }
+    console.log(community.members)
+    // The 'members' property will contain an array of user details
+    return community.members;
+  } catch (error : any ) {
+    throw new Error(`Failed to fetch community members: ${error.message}`);
+  }
+}
+
 export async function fetchCommunities({
   searchString = "",
   pageNumber = 1,
@@ -260,11 +309,6 @@ export async function updateCommunityInfo({
 }: Props) {
   try {
     connectToDB();
-    // console.log(  communityId,
-    //   name,
-    //   username,
-    //   description,
-    //   profile)
     // Find the community by its _id and update the information
     const updatedCommunity = await Community.findOneAndUpdate(
       { _id: communityId },
@@ -389,5 +433,62 @@ export async function createCommunityThread({ text, author, communityId, path, p
     revalidatePath(path);
   } catch (error: any) {
     throw new Error(`Failed to create thread: ${error.message}`);
+  }
+}
+
+
+
+
+export async function followCommunity(currentUserObjectId : string, communityId :string) {
+  try {
+    connectToDB();
+    // Check if the user to follow exists
+    const communityToFollow = await Community.findById(communityId);
+    if (!communityToFollow) {
+      throw new Error('Community to follow not found');
+    }
+    
+    // Check if the current user exists
+    const currentUser = await User.findById(currentUserObjectId);
+    if (!currentUser) {
+      throw new Error('Current user not found');
+    }
+    if(!currentUser.communities.includes(communityToFollow._id)){
+    //   // Add the user to follow to the current user's 'followings' list
+      currentUser.communities.push(communityToFollow._id);
+      communityToFollow.members.push(currentUser._id);
+      await currentUser.save();
+      await communityToFollow.save();
+    }    
+    
+  } catch (error : any ) {
+    throw new Error(`Failed to follow user: ${error.message}`);
+  }
+}
+export async function unfollowCommunity(currentUserObjectId : string, communityId :string) {
+  try {
+    connectToDB();
+
+    // Check if the user to follow exists
+    const communityToFollow = await Community.findById(communityId);
+    if (!communityToFollow) {
+      throw new Error('Community to follow not found');
+    }
+
+    // Check if the current user exists
+    const currentUser = await User.findById(currentUserObjectId);
+    if (!currentUser) {
+      throw new Error('Current user not found');
+    }
+    if(currentUser.communities.includes(communityToFollow._id)){
+      // Add the user to follow to the current user's 'followings' list
+      currentUser.members.pull(communityToFollow._id);
+      communityToFollow.communities.pull(currentUser._id);
+      await currentUser.save();
+      await communityToFollow.save();
+    }    
+    
+  } catch (error : any ) {
+    throw new Error(`Failed to follow user: ${error.message}`);
   }
 }
