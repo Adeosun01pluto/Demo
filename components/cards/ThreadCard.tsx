@@ -18,7 +18,7 @@ interface Props {
   community: {
     id: string;
     name: string;
-    image: string;
+    profile: string;
   } | null;
   createdAt: string;
   comments: {
@@ -108,10 +108,12 @@ function ThreadCard({
           </p>
 
           <Image
-            src={community.image}
+            src={community?.profile}
             alt={community.name}
-            width={14}
-            height={14}
+            width={12}
+            height={12}
+            // objectFit="contain"
+            // quality={100}
             className='ml-1 rounded-full object-cover'
           />
         </Link>

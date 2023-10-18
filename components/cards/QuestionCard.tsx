@@ -18,7 +18,7 @@ interface Props {
   community: {
     id: string;
     name: string;
-    image: string;
+    profile: string;
   } | null;
   createdAt: string;
   comments: {
@@ -111,7 +111,7 @@ function QuestionCard({
           </p>
 
           <Image
-            src={community.image}
+            src={community?.profile}
             alt={community.name}
             width={14}
             height={14}
