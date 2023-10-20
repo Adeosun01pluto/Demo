@@ -8,6 +8,7 @@ import Content from "../forms/Content";
 interface Props {
   id: string;
   currentUserId: string;
+  currentUser_Id: string;
   parentId: string | null;
   content: string;
   author: {
@@ -34,6 +35,7 @@ interface Props {
 function QuestionCard({
   id,
   currentUserId,
+  currentUser_Id,
   parentId,
   content,
   author,
@@ -66,7 +68,7 @@ function QuestionCard({
             <div className='thread-card_bar' />
           </div>
 
-          <Content likes={likes} contentType={"questions"} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUserId={currentUserId}/>
+          <Content likes={likes} contentType={"questions"} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUser_Id={currentUser_Id}/>
 
         </div>
 

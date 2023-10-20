@@ -25,7 +25,9 @@ async function page({ params }: { params: { id: string } }) {
       <div>
         <QuestionCard
           id={question._id}
-          currentUserId={userInfo._id}
+          currentUserId={user.id}
+          likes={question.likes}
+          currentUser_Id={userInfo._id}
           parentId={question.parentId}
           content={question.text}
           author={question.author}
@@ -49,7 +51,9 @@ async function page({ params }: { params: { id: string } }) {
           <QuestionCard
             key={childItem._id}
             id={childItem._id}
-            currentUserId={userInfo._id}
+            likes={question.likes}
+            currentUserId={user.id}
+            currentUser_Id={userInfo._id}
             parentId={childItem.parentId}
             content={childItem.text}
             author={childItem.author}

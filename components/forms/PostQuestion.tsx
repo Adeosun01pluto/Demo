@@ -25,6 +25,7 @@ import { useUploadThing } from "@/lib/uploadthing";
 import { ChangeEvent, useState } from "react";
 import { isBase64Image } from "@/lib/utils";
 import { createCommunityQuestion } from "@/lib/actions/community.actions";
+import { ThreeDots } from "react-loader-spinner";
 // import { createThread } from "@/lib/actions/thread.actions";
 
 interface Props {
@@ -38,6 +39,9 @@ function PostQuestion({ userId, communityId }: Props) {
   const { startUpload } = useUploadThing("photos");
   const [files, setFiles] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [isAlertVisible, setAlertVisible] = useState(false);
+  const [alertType, setAlertType] = useState('success'); // You can set the alert type (e.g., success, error)
+  const [alertMessage, setAlertMessage] = useState('');
 
   const { organization } = useOrganization();
 
@@ -49,30 +53,50 @@ function PostQuestion({ userId, communityId }: Props) {
       picture: "",
     },
   });
+  const showAlert = (type: string, message: string) => {
+    setAlertType(type);
+    setAlertMessage(message);
+    setAlertVisible(true);
+
+    // Hide the alert after 5 seconds (you can adjust the duration)
+    setTimeout(() => {
+      setAlertVisible(false);
+    }, 2000);
+  };
 
   const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
     setIsLoading(true)
-    const blob = values.picture;
-    let fileUrls: string[] | null = null; // Initialize as null
-    const hasImageChanged = isBase64Image(blob);
-    if (hasImageChanged) {
-      const imgRes = await startUpload(files);
-      if (imgRes && imgRes[0].fileUrl) {
-        fileUrls = imgRes.map((item) => item.fileUrl);
+    try {
+      const blob = values.picture;
+      let fileUrls: string[] | null = null; // Initialize as null
+      const hasImageChanged = isBase64Image(blob);
+      if (hasImageChanged) {
+        const imgRes = await startUpload(files);
+        if (imgRes && imgRes[0].fileUrl) {
+          fileUrls = imgRes.map((item) => item.fileUrl);
+        }
       }
-    }
-    await createQuestion({
-        text: values.thread,
-        author: userId,
-        communityId,
-        path: pathname,
-        photos: fileUrls,
-    });
-    setIsLoading(false)
-    if(communityId){
-      router.push(`/communities/${communityId}`);
-    }else{
-      router.push(`/questions`);
+      await createQuestion({
+          text: values.thread,
+          author: userId,
+          communityId,
+          path: pathname,
+          photos: fileUrls,
+      });
+      // Reset the form fields to empty values
+      form.reset({});
+      setIsLoading(false)
+      showAlert('success', 'Question posted successfully!');
+      if(communityId){
+        router.push(`/communities/${communityId}`);
+      }else{
+        router.push(`/questions`);
+      }
+      
+    } catch (error) {
+      setIsLoading(false)
+      showAlert('Error', 'Failed to Post Question !');
+      console.log(error)
     }
   };
   const handleImage = (e:ChangeEvent<HTMLInputElement>, fieldChange:(value:string)=>void) => {
@@ -96,6 +120,7 @@ function PostQuestion({ userId, communityId }: Props) {
   };
 
   return (
+    <div className="relative">    
     <Form {...form}>
       <form
         className='mt-5 flex flex-col justify-start gap-5'
@@ -156,11 +181,38 @@ function PostQuestion({ userId, communityId }: Props) {
         />
 
 
-        <Button type='submit' className={`${isLoading? "" : "bg-primary-500"} `}>
-          {isLoading? "Loading" : "Post Question"}
-        </Button>
+        {isLoading? 
+          <Button type='submit' className={`w-full flex justify-center ${isLoading? "" : ""} `}>
+            <ThreeDots 
+              height="50" 
+              width="50" 
+              radius="9"
+              color="#fff" 
+              ariaLabel="three-dots-loading"
+              wrapperStyle={{}}
+              // wrapperClassName=""
+              visible={true}
+            />
+          </Button> :
+          <Button type='submit' className={`${isLoading? "" : "bg-primary-500"} `}>
+            Post Question
+          </Button>
+        }
       </form>
     </Form>
+    <div className='absolute bottom-[50px] z-[9999] right-0 flex flex-col justify-start gap-5'>
+        {isAlertVisible && (
+          <div
+            className={`alert-${alertType} bg-opacity-50 bg-${
+              alertType === 'success' ? 'green' : 'red'
+            }-700 p-2 rounded-lg`}
+          >
+            {alertMessage}
+          </div>
+        )
+        }
+      </div>
+    </div>
   );
 }
 

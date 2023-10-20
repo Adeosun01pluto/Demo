@@ -71,7 +71,7 @@ async function RightSideBar() {
         <h3 className="text-heading4-medium text-light-1">Suggested Users</h3>
           <div>
             {users.users.map((person)=>(
-                <article className='user-card my-2'>
+                <article key={person._id} className='user-card my-2'>
                   <div className='user-card_avatar'>
                     <div className='relative h-8 w-8'>
                       <Image

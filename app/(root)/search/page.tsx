@@ -5,10 +5,13 @@ import React from 'react'
 import UserCard from '../../../components/cards/UserCard'
 import Searchbar from '@/components/shared/Searchbar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-// import SearchTabs from '@/components/forms/SearchTabs'
+interface SearchParams {
+  q: string;
+}
 
 
-async function Page({searchParams }) {
+
+async function Page({searchParams} : { searchParams: SearchParams }) {
   const user = await currentUser()
   if(!user) return null
 

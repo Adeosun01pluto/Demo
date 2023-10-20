@@ -20,7 +20,6 @@ async function Page({searchParams }) {
     pageSize: 25
   });
   if (!user) redirect("/sign-in")
-  
   return (
      <>
       <h1 className="head-text">Home</h1>
@@ -35,7 +34,8 @@ async function Page({searchParams }) {
                 key={post._id}
                 id={post._id}
                 likes={post.likes}
-                currentUserId={userInfo._id}
+                currentUserId={user.id}
+                currentUser_Id={userInfo._id}
                 parentId={post.parentId}
                 content={post.text}
                 author={post.author}

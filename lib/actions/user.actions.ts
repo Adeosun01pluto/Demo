@@ -99,7 +99,6 @@ export async function fetchUserPosts(userId: string) {
 export async function fetchUserQuestions(userId: string) {
   try {
     connectToDB();  
-    console.log(userId)
     // Find all threads authored by the user with the given userId
     const question = await Question.find({ author: userId }).populate({
       path: "author",

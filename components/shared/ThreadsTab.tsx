@@ -5,60 +5,86 @@ import { fetchUserPosts, fetchUserQuestions } from "@/lib/actions/user.actions";
 
 import ThreadCard from "../cards/ThreadCard";
 import QuestionCard from "../cards/QuestionCard";
+import { Community } from "@/lib/types";
 
-interface Result {
-  name: string;
-  image: string;
-  id: string;
-  threads: {
-    _id: string;
-    text: string;
-    parentId: string | null;
-    author: {
-      name: string;
-      image: string;
-      id: string;
-    };
-    community: {
-      id: string;
-      name: string;
-      image: string;
-    } | null;
-    createdAt: string;
-    children: {
-      author: {
-        image: string;
-      };
-    }[];
-  }[];
-}
 
 interface Props {
   currentUserId: string;
+  currentUser_Id: string;
   accountId: string;
   accountType: string;
   type: string;
 }
+interface Thread {
+  _id: string;
+  text: string;
+  parentId: string | null;
+  author: {
+    name: string;
+    image: string;
+    id: string;
+  };
+  community: Community | null;
+  createdAt: string;
+  children: {
+    author: {
+      image: string;
+    };
+  }[];
+  // Add any other properties you expect here
+}
 
-async function ThreadsTab({ currentUserId, accountId, accountType, type }: Props) {
-  let result: Result;
-  let questions: Result;
+// Define the type for the 'result' variable
+interface Result {
+  threads: Thread[];
+  // Add any other properties you expect here
+}
+interface Question {
+  _id: string;
+  text: string;
+  parentId: string | null;
+  author: {
+    name: string;
+    image: string;
+    id: string;
+  };
+  community: {
+    id: string;
+    name: string;
+    image: string;
+  } | null;
+  createdAt: string;
+  children: {
+    author: {
+      image: string;
+    };
+  }[];
+  // Add any other properties you expect here
+}
+
+
+async function ThreadsTab({ currentUserId,currentUser_Id, accountId, accountType, type }: Props) {
+  let result: Result | null = null;
+  let questions: Question[] = [];
   if (type === "Questions") {
-    questions = await fetchUserQuestions(accountId);
+    questions = await fetchUserQuestions(currentUser_Id);
   } else if (type= "Threads") {
-    result = await fetchUserPosts(currentUserId);
+    result = await fetchUserPosts(accountId);
   }
+  // console.log(questions)
   return (
     <section className='mt-9 flex flex-col gap-10'>
       {
         type === "Threads" ?
-      (result.threads.map((thread) => (
+      (result?.threads.map((thread :any) => (
         <ThreadCard
           key={thread._id}
           id={thread._id}
           currentUserId={currentUserId}
+          currentUser_Id={currentUser_Id}
           parentId={thread.parentId}
           content={thread.text}
+          likes={thread.likes}
           author={
             accountType === "User"
               ? { name: result.name, image: result.image, id: result.id }
@@ -68,21 +94,23 @@ async function ThreadsTab({ currentUserId, accountId, accountType, type }: Props
                   id: thread.author.id,
                 }
           }
-          community={
-            accountType === "Community"
-              ? { name: result.name, id: result.id, image: result.image }
-              : thread.community
-          }
+          community={thread.community}
+          // community={
+          //   accountType === "Community"
+          //     ? { name: result.name, id: result.id, image: result.image }
+          //     : thread.community
+          // }
           createdAt={thread.createdAt}
           comments={thread.children}
         />
       ))) : type === "Questions" ? 
-      (questions?.map((question)=>(
+      (questions?.map((question :any)=>(
         <QuestionCard 
           key={question._id}
           id={question._id}
           likes={question.likes}
           currentUserId={currentUserId}
+          currentUser_Id={currentUser_Id}
           parentId={question.parentId}
           content={question.text}
           author={question.author}

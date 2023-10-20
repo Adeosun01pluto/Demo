@@ -6,9 +6,17 @@ import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-async function Page({ searchParams }) {
+interface SearchParams {
+  q: string;
+}
+
+
+async function Page({ searchParams } :{ searchParams: SearchParams }) {
   const search = typeof searchParams.q === 'string' ? searchParams.q : undefined
   const user = await currentUser()
+  if(!user){
+    return null
+  }
   const userInfo  = await fetchUser(user.id)
   const result = await fetchQuestions({
     userId: userInfo._id,
@@ -31,7 +39,8 @@ async function Page({ searchParams }) {
                 key={question._id}
                 id={question._id}
                 likes={question.likes}
-                currentUserId={userInfo._id}
+                currentUserId={user.id}
+                currentUser_Id={userInfo._id}
                 parentId={question.parentId}
                 content={question.text}
                 author={question.author}

@@ -10,20 +10,20 @@ import { useState } from "react";
 interface Props{
     id: string;
     contentType : string
-    currentUserId:string
+    currentUser_Id:string
     isComment?: boolean | undefined
     likes?: string[] | []
 }
 
-function Action({contentType, id, currentUserId, likes, isComment }:Props) {
+function Action({contentType, id, currentUser_Id, likes, isComment }:Props) {
   const [likesArr, setLikesArr] = useState<string[]>(likes || [])
     const likeThreadHandle = async ()=>{
       if(contentType==="questions"){
-        const res = await likeQuestion( id,currentUserId)
+        const res = await likeQuestion( id,currentUser_Id)
         setLikesArr(res)
       }
       if(contentType==="thread"){
-        const res = await likeThread( id,currentUserId)
+        const res = await likeThread( id,currentUser_Id)
         setLikesArr(res)
       }
     }
@@ -31,7 +31,7 @@ function Action({contentType, id, currentUserId, likes, isComment }:Props) {
     <div>
         <div className='flex gap-3.5'>
           {
-            isComment? null : likesArr?.includes(currentUserId) ? 
+            isComment? null : likesArr?.includes(currentUser_Id) ? 
             <Image
             onClick={likeThreadHandle}
             src='/assets/heart-filledin.svg'

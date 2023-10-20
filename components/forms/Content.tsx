@@ -2,13 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import Action from "./Action";
 import ImageCard from "../cards/ImageCard";
+import { Author } from "@/lib/types";
 
 interface Props{
-    author: {
-        name: string;
-        image: string;
-        id: string;
-    };
+    author: Author
     photos?:string[] | [] 
     likes?:string[] | [] 
     isComment?: boolean;
@@ -20,13 +17,13 @@ interface Props{
         };
     }[];
     contentType : string;
-    currentUserId:string
+    currentUser_Id:string
 }
 
-export default function Content({author,photos, isComment, content, id, comments, contentType, currentUserId, likes }:Props) {
+export default function Content({author,photos, isComment, content, id, comments, contentType, currentUser_Id, likes }:Props) {
   return (
     <div>
-        <div className='flex w-full flex-col'>
+        <div className='flex 500 flex-col'>
             <Link href={`/profile/${author.id}`} className='w-fit'>
               <h4 className='cursor-pointer text-base-semibold text-light-1'>
                 {author.name}
@@ -34,7 +31,9 @@ export default function Content({author,photos, isComment, content, id, comments
             </Link>
 
             <p className='mt-2 text-small-regular text-light-2'>{content}</p>
-            <ImageCard photos={photos} isComment={isComment} />
+            <div className=" w-full">
+              <ImageCard photos={photos} isComment={isComment} />
+            </div>
             {/* {
               !isComment && (
                 <div className="w-full ">
@@ -58,8 +57,8 @@ export default function Content({author,photos, isComment, content, id, comments
               )
             } */}
 
-            <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
-              <Action contentType={contentType} isComment={isComment} likes={likes} currentUserId={currentUserId} id={id}/>
+            <div className={`${isComment && "mb-10"} mt-5 flex flex-col items-start gap-3`}>
+              <Action contentType={contentType} isComment={isComment} likes={likes} currentUser_Id={currentUser_Id} id={id}/>
               {isComment && comments.length > 0 && (
                 <Link href={`/${contentType}/${id}`}>
                   <p className='mt-1 text-subtle-medium text-gray-1'>

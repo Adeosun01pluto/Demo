@@ -52,10 +52,10 @@ export async function fetchPosts({
       path: "author",
       model: User,
     })
-    // .populate({
-    //   path: "community",
-    //   model: Community,
-    // })
+    .populate({
+      path: "community",
+      model: Community,
+    })
     .populate({
       path: "children", // Populate the children field
       populate: {
@@ -67,7 +67,7 @@ export async function fetchPosts({
     .populate({
       path: "community",
       model: Community,
-      select: "name profile ", // Select the "name" field from the "Community" model
+      select: "name profile id ", // Select the "name" field from the "Community" model
     })
 
   // Count the total number of top-level posts (threads) i.e., threads that are not comments.
@@ -359,5 +359,31 @@ export async function likeThread(threadId: string, userId: string): Promise<stri
     return thread.likes; // Return the updated list of likes for the thread
   } catch (error : any ) {
     throw new Error(`Failed to like/unlike thread: ${error.message}`);
+  }
+}
+
+export async function repostThread(threadId: string, userId: string): Promise<string[]> {
+  try {
+    connectToDB(); // Make sure you've implemented your DB connection logic
+
+    // Check if the user has already repost the thread
+    const thread = await Thread.findById(threadId);
+    const user = await User.findById(userId);
+    if (!thread) {
+      throw new Error('thread not found');
+    }
+    console.log(threadId, userId)
+    if (user.repostThread.includes(threadId)) {
+      // User has already repost the thread, so remove the like
+      user.repostThread.pull(threadId);
+    } else {
+      user.repostThread.push(threadId);
+    }
+
+    await thread.save();
+    
+    return thread.repostThread; // Return the updated list of likes for the question
+  } catch (error : any ) {
+    throw new Error(`Failed to like/unlike question: ${error.message}`);
   }
 }

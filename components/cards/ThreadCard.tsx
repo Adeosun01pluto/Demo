@@ -4,10 +4,12 @@ import Link from "next/link";
 import { formatDateString } from "@/lib/utils";
 import DeleteThread from "../forms/DeleteThread";
 import Content from "../forms/Content";
+import { Community } from "@/lib/types";
 
 interface Props {
   id: string;
   currentUserId: string;
+  currentUser_Id: string;
   parentId: string | null;
   content: string;
   author: {
@@ -15,11 +17,7 @@ interface Props {
     image: string;
     id: string;
   };
-  community: {
-    id: string;
-    name: string;
-    profile: string;
-  } | null;
+  community: Community | null;
   createdAt: string;
   comments: {
     author: {
@@ -34,6 +32,7 @@ interface Props {
 function ThreadCard({
   id,
   currentUserId,
+  currentUser_Id,
   parentId,
   content,
   author,
@@ -64,9 +63,8 @@ function ThreadCard({
 
             <div className='thread-card_bar' />
           </div>
-          <Content contentType={"thread"} likes={likes} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUserId={currentUserId}/>
+          <Content contentType={"thread"} likes={likes} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUser_Id={currentUser_Id}/>
         </div>
-
         <DeleteThread
           threadId={JSON.stringify(id)}
           currentUserId={currentUserId}
@@ -77,17 +75,20 @@ function ThreadCard({
       </div>
 
       {!isComment && comments.length > 0 && (
-        <div className='ml-1 mt-3 flex items-center gap-2'>
-          {comments.slice(0, 2).map((comment, index) => (
-            <Image
+        <div className='ml-1 flex items-center gap-2'>
+          <div className="flex gap-4 items-center h-[15px]">
+            {comments.slice(0, 3).map((comment, index) => (
+              <Image
               key={index}
               src={comment.author.image}
               alt={`user_${index}`}
-              width={24}
-              height={24}
+              width={15}
+              height={20}
+              // objectFit="cover"
               className={`${index !== 0 && "-ml-5"} rounded-full object-cover`}
-            />
-          ))}
+              />
+            ))}
+          </div>
 
           <Link href={`/thread/${id}`}>
             <p className='mt-1 text-subtle-medium text-gray-1'>
@@ -99,7 +100,7 @@ function ThreadCard({
       
       {!isComment && community && (
         <Link
-          href={`/communities/${community.id}`}
+          href={`/communities/${community._id}`}
           className='mt-5 flex items-center'
         >
           <p className='text-subtle-medium text-gray-1'>
@@ -112,8 +113,8 @@ function ThreadCard({
             alt={community.name}
             width={12}
             height={12}
-            // objectFit="contain"
-            // quality={100}
+            objectFit="contain"
+            quality={100}
             className='ml-1 rounded-full object-cover'
           />
         </Link>

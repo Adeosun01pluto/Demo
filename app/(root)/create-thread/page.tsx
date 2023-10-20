@@ -8,7 +8,6 @@ import TabsComponent from "@/components/forms/TabsComponent";
 
 
 async function page() {
-
     const user = await currentUser()
     if(!user){
         return null
@@ -20,7 +19,7 @@ async function page() {
 
     return (
         <div className="mt-12">
-            <TabsComponent _id={userInfo?._id || ""} />        
+            <TabsComponent _id={userInfo?._id} />        
         </div>
     )
 }

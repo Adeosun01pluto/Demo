@@ -30,6 +30,7 @@ import Image from "next/image";
 import { useUploadThing } from "@/lib/uploadthing";
 import { isBase64Image } from "@/lib/utils";
 import { createCommunityThread } from "@/lib/actions/community.actions";
+import { ThreeDots } from "react-loader-spinner";
 
 interface Props {
   userId: string;
@@ -42,6 +43,10 @@ function PostThread({ userId, communityId }: Props) {
   const { startUpload } = useUploadThing("photos");
   const [files, setFiles] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [isAlertVisible, setAlertVisible] = useState(false);
+  const [alertType, setAlertType] = useState('success'); // You can set the alert type (e.g., success, error)
+  const [alertMessage, setAlertMessage] = useState('');
+
 
   const form = useForm<z.infer<typeof ThreadValidation>>({
     resolver: zodResolver(ThreadValidation),
@@ -51,30 +56,49 @@ function PostThread({ userId, communityId }: Props) {
       picture: "",
     },
   });
+  const showAlert = (type: string, message: string) => {
+    setAlertType(type);
+    setAlertMessage(message);
+    setAlertVisible(true);
+
+    // Hide the alert after 5 seconds (you can adjust the duration)
+    setTimeout(() => {
+      setAlertVisible(false);
+    }, 2000);
+  };
 
   const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
     setIsLoading(true)
-    const blob = values.picture;
-    let fileUrls: string[] | null = null; // Initialize as null
-    const hasImageChanged = isBase64Image(blob);
-    if (hasImageChanged) {
-      const imgRes = await startUpload(files);
-      if (imgRes && imgRes[0].fileUrl) {
-        fileUrls = imgRes.map((item) => item.fileUrl);
+    try {
+      const blob = values.picture;
+      let fileUrls: string[] | null = null; // Initialize as null
+      const hasImageChanged = isBase64Image(blob);
+      if (hasImageChanged) {
+        const imgRes = await startUpload(files);
+        if (imgRes && imgRes[0].fileUrl) {
+          fileUrls = imgRes.map((item) => item.fileUrl);
+        }
       }
-    }
-    await createThread({
-        text: values.thread,
-        author: userId,
-        communityId: communityId,
-        photos: fileUrls,
-        path: pathname,
-    });
-    setIsLoading(false)
-    if(communityId){
-      router.push(`/communities/${communityId}`);
-    }else{
-      router.push(`/`);
+      await createThread({
+          text: values.thread,
+          author: userId,
+          communityId: communityId,
+          photos: fileUrls,
+          path: pathname,
+      });
+      // Reset the form fields to empty values
+      form.reset({});
+      setIsLoading(false)
+      showAlert('success', 'Thread posted successfully!');
+      if(communityId){
+        router.push(`/communities/${communityId}`);
+      }else{
+        router.push(`/`);
+      }
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+      showAlert('Error', 'Failed to Post Question !');
     }
   };
   const handleImage = (e:ChangeEvent<HTMLInputElement>, fieldChange:(value:string)=>void) => {
@@ -99,79 +123,102 @@ function PostThread({ userId, communityId }: Props) {
 
 
   return (
-    <Form {...form}>
-      <form
-        className='mt-5 flex flex-col justify-start gap-5'
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <FormField
-          control={form.control}
-          name='thread'
-          render={({ field }) => (
-            <FormItem className='flex w-full flex-col gap-3'>
-              <FormLabel className='text-base-semibold text-light-2'>
-                Content
-              </FormLabel>
-              <FormControl className='no-focus border border-dark-4 bg-dark-3 text-light-1'>
-                <Textarea rows={15} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> 
-        {/* <UploadButton<OurFileRouter>
-          endpoint="media"
-          onClientUploadComplete={handleClientUploadComplete}
-          onUploadError={handleUploadError}
-        /> */}
-        <FormField
-          control={form.control}
-          name='picture'
-          render={({ field }) => (
-            <FormItem className='flex items-center gap-4'>
-              <FormLabel className=''>
-                {field.value ? (
-                  <Image
-                    src={field.value}
-                    alt='profile_icon'
-                    width={20}
-                    height={20}
-                    priority
-                    className='rounded-full object-contain'
+    <div className="relative">
+      <Form {...form}>
+        <form
+          className='mt-5 flex flex-col justify-start gap-5'
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <FormField
+            control={form.control}
+            name='thread'
+            render={({ field }) => (
+              <FormItem className='flex w-full flex-col gap-3'>
+                <FormLabel className='text-base-semibold text-light-2'>
+                  Content
+                </FormLabel>
+                <FormControl className='no-focus border border-dark-4 bg-dark-3 text-light-1'>
+                  <Textarea rows={15} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          /> 
+          {/* <UploadButton<OurFileRouter>
+            endpoint="media"
+            onClientUploadComplete={handleClientUploadComplete}
+            onUploadError={handleUploadError}
+          /> */}
+          <FormField
+            control={form.control}
+            name='picture'
+            render={({ field }) => (
+              <FormItem className='flex items-center gap-4'>
+                <FormLabel className=''>
+                  {field.value ? (
+                    <Image
+                      src={field.value}
+                      alt='profile_icon'
+                      width={20}
+                      height={20}
+                      priority
+                      className='rounded-full object-contain'
+                    />
+                  ) : (
+                    <Image
+                      src='/assets/profile.svg'
+                      alt='profile_icon'
+                      width={24}
+                      height={24}
+                      className='object-contain'
+                    />
+                  )}
+                </FormLabel>
+                <FormControl className='flex-1 text-base-semibold text-gray-200'>
+                  <Input
+                    type='file'
+                    accept='image/*'
+                    multiple
+                    placeholder='Add profile photo'
+                    className='account-form_image-input'
+                    onChange={(e) => handleImage(e, field.onChange)}
                   />
-                ) : (
-                  <Image
-                    src='/assets/profile.svg'
-                    alt='profile_icon'
-                    width={24}
-                    height={24}
-                    className='object-contain'
-                  />
-                )}
-              </FormLabel>
-              <FormControl className='flex-1 text-base-semibold text-gray-200'>
-                <Input
-                  type='file'
-                  accept='image/*'
-                  multiple
-                  placeholder='Add profile photo'
-                  className='account-form_image-input'
-                  onChange={(e) => handleImage(e, field.onChange)}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        
-        {isLoading? <Button type='submit' className={`${isLoading? "" : "bg-primary-500"} `}>
-          Loading
-        </Button> :
-        <Button type='submit' className={`${isLoading? "" : "bg-primary-500"} `}>
-          Post Thread
-        </Button>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          {isLoading? 
+          <Button type='submit' className={`w-full flex justify-center bg-primary-500`}>
+            <ThreeDots 
+              height="50" 
+              width="50" 
+              radius="9"
+              color="#fff" 
+              ariaLabel="three-dots-loading"
+              wrapperStyle={{}}
+              // wrapperClassName=""
+              visible={true}
+            />
+          </Button> :
+          <Button type='submit' className={`bg-primary-500 `}>
+            Post Thread
+          </Button>
         }
-      </form>
-    </Form>
+        </form>
+      </Form>
+      <div className='absolute bottom-[50px] z-[9999] right-0 flex flex-col justify-start gap-5'>
+        {isAlertVisible && (
+          <div
+            className={`alert-${alertType} bg-opacity-50 bg-${
+              alertType === 'success' ? 'green' : 'red'
+            }-700 p-4 rounded-lg`}
+          >
+            {alertMessage}
+          </div>
+        )
+        }
+      </div>
+    </div>
   );
 }
 

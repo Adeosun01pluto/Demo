@@ -1,15 +1,14 @@
 "use client"
-import { ChangeEvent, useEffect, useState } from "react";
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-    TERipple,
+    // TERipple,
     TEModal,
     TEModalDialog,
     TEModalContent,
     TEModalHeader,
     TEModalBody,
 } from "tw-elements-react";
-// import { Button } from "../ui/button";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import PostThread from "./PostThread";

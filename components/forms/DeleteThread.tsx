@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-
 import { deleteThread } from "@/lib/actions/thread.actions";
 
 interface Props {
@@ -22,22 +21,34 @@ function DeleteThread({
 }: Props) {
   const pathname = usePathname();
   const router = useRouter();
-
   if (currentUserId !== authorId || pathname === "/") return null;
+
+  const deleteHandler = () => {
+    // Display a confirmation dialog
+    const isConfirmed = window.confirm("Are you sure you want to delete this thread?");
+    if (isConfirmed) {
+      // User confirmed, proceed with the deletion
+      deleteThread(JSON.parse(threadId), pathname)
+        .then(() => {
+          if (!parentId || !isComment) {
+            router.push(`${pathname}`);
+          }
+        })
+        .catch((error) => {
+          console.error("Error deleting thread:", error);
+        });
+    }
+  };
+
 
   return (
     <Image
-      src='/assets/delete.svg'
-      alt='delte'
+      src="/assets/delete.svg"
+      alt="delete"
       width={18}
       height={18}
-      className='cursor-pointer object-contain'
-      onClick={async () => {
-        await deleteThread(JSON.parse(threadId), pathname);
-        if (!parentId || !isComment) {
-          router.push("/");
-        }
-      }}
+      className="cursor-pointer object-contain"
+      onClick={deleteHandler}
     />
   );
 }
