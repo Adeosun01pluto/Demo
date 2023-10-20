@@ -63,7 +63,9 @@ function ThreadCard({
 
             <div className='thread-card_bar' />
           </div>
-          <Content contentType={"thread"} likes={likes} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUser_Id={currentUser_Id}/>
+          <div className="w-full">
+            <Content contentType={"thread"} likes={likes} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUser_Id={currentUser_Id}/>
+          </div>
         </div>
         <DeleteThread
           threadId={JSON.stringify(id)}

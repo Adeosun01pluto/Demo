@@ -79,13 +79,14 @@ function PostThread({ userId, communityId }: Props) {
           fileUrls = imgRes.map((item) => item.fileUrl);
         }
       }
-      await createThread({
+      const res = await createThread({
           text: values.thread,
           author: userId,
           communityId: communityId,
           photos: fileUrls,
           path: pathname,
       });
+      console.log(res)
       // Reset the form fields to empty values
       form.reset({});
       setIsLoading(false)
