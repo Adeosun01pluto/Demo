@@ -3,6 +3,7 @@ import Link from "next/link";
 import Action from "./Action";
 import ImageCard from "../cards/ImageCard";
 import { Author } from "@/lib/types";
+import { Suspense } from "react";
 
 interface Props{
     author: Author
@@ -21,7 +22,7 @@ interface Props{
     currentUser_Id:string
 }
 
-export default function Content({author,photos, isComment, content, id, comments, contentType, currentUser_Id, likes, repost }:Props) {
+export default async function Content({author,photos, isComment, content, id, comments, contentType, currentUser_Id, likes, repost }:Props) {
   return (
     <div>
         <div className='flex 500 flex-col'>
@@ -35,7 +36,6 @@ export default function Content({author,photos, isComment, content, id, comments
             <div className=" w-full">
               <ImageCard photos={photos} isComment={isComment} />
             </div>
-
             <div className={`${isComment && "mb-10"} mt-5 flex flex-col items-start gap-3`}>
               <Action contentType={contentType} repost={repost} isComment={isComment} likes={likes} currentUser_Id={currentUser_Id} id={id}/>
               {isComment && comments.length > 0 && (

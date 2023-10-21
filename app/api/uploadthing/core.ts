@@ -30,7 +30,7 @@ export const ourFileRouter = {
       console.log("file url", file.url);
     }),
   // Define as many FileRoutes as you like, each with a unique routeSlug
-  photos: f({ image: { maxFileSize: "4MB", maxFileCount: 5 } })
+  photos: f({ image: { maxFileSize: "4MB", maxFileCount: 4 } })
     // Set permissions and file types for this FileRoute
     .middleware(async (req) => {
       // This code runs on your server before upload

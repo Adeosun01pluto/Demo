@@ -33,10 +33,11 @@ function ImageCard({ photos, isComment }: Props) {
   return (
     <div className='w-full mt-2'>
       {!isComment && photos && photos?.length > 0 && (
-        <div className="w-full bg-red-900 grid">
+        <div className="w-full  grid">
           {photos?.length === 1 ? (
-            <div className='w-[100%] relative overflow-hidden bg-red-300 h-32 sm:h-48 md:h-64'>
+            <div className='w-[100%] relative overflow-hidden  h-32 sm:h-48 md:h-64'>
               <Image
+                loading='lazy'
                 src={photos[0]}
                 onClick={()=>openImageViewer(photos[0])}
                 alt="photo"
@@ -46,14 +47,15 @@ function ImageCard({ photos, isComment }: Props) {
               />
             </div>
           ) : photos?.length === 2 ? (
-            <div className="w-[100%] bg-red-500 grid grid-cols-2">
+            <div className="w-[100%]  grid grid-cols-2">
               {photos?.map((photo, index) => (
                 <div
                   key={index}
-                  className='bg-black relative h-32 sm:h-48 md:h-64 overflow-hidden'
+                  className='relative h-48 overflow-hidden'
                 >
                   <Image
                     onClick={()=>openImageViewer(photo)}
+                    loading='lazy'
                     src={photo}
                     sizes="(min-width: 980px) 342px, (min-width: 780px) calc(38.89vw - 31px), (min-width: 640px) calc(50vw - 82px), calc(50vw - 50px)"
                     alt="photo"
@@ -65,9 +67,10 @@ function ImageCard({ photos, isComment }: Props) {
               ))}
             </div>
           ) :photos?.length === 3 ? (
-            <div className="grid grid-cols-2 w-[100%] bg-red-500">
-              <div className="w-full bg-black relative h-32 sm:h-48 md:h-64 overflow-hidden">
+            <div className="grid grid-cols-2 w-[100%] ">
+              <div className="w-full relative h-48 md:h-64 overflow-hidden">
                 <Image
+                  loading='lazy'
                   src={photos[0]}
                   onClick={()=>openImageViewer(photos[0])}
                   sizes="(min-width: 980px) 342px, (min-width: 780px) calc(38.89vw - 31px), (min-width: 640px) calc(50vw - 82px), calc(50vw - 50px)"
@@ -77,14 +80,15 @@ function ImageCard({ photos, isComment }: Props) {
                   className="object-cover cursor-pointer absolute rounded-sm"
                 />
               </div>
-              <div className="w-full bg-red-500 grid grid-rows-2">
+              <div className="w-full  grid grid-rows-2">
                 {photos?.slice(1).map((photo, index) => (
                   <div
                     key={index}
-                    className='bg-black relative overflow-hidden'
+                    className='relative overflow-hidden'
                   >
                     <Image
                       onClick={()=>openImageViewer(photo)}
+                      loading='lazy'
                       src={photo}
                       sizes="(min-width: 980px) 342px, (min-width: 780px) calc(38.89vw - 31px), (min-width: 640px) calc(50vw - 82px), calc(50vw - 50px)"
                       alt="photo"
@@ -97,15 +101,16 @@ function ImageCard({ photos, isComment }: Props) {
               </div>
             </div>
           ) :( photos?.length === 4 && (
-              <div className="w-[100%] bg-red-500 grid grid-cols-2">
+              <div className="w-[100%]  grid grid-cols-2">
                 {photos?.map((photo, index) => (
                   <div
                     key={index}
-                    className="bg-black relative h-[130px] sm:h-48 md:h-64 overflow-hidden"
+                    className="relative h-32 overflow-hidden"
                   >
                     <Image
                       onClick={() => openImageViewer(photo)}
                       sizes="(min-width: 980px) 342px, (min-width: 780px) calc(38.89vw - 31px), (min-width: 640px) calc(50vw - 82px), calc(50vw - 50px)"
+                      loading='lazy'
                       src={photo}
                       alt="photo"
                       fill={true}
@@ -119,14 +124,31 @@ function ImageCard({ photos, isComment }: Props) {
           )}
         </div>
       )}
-      {photos?.length > 4 && (
-        <button
-          onClick={() => setShowAllPhotos(!showAllPhotos)}
-          className="cursor-pointer my-1 rounded-sm text-blue-500"
-        >
-          {showAllPhotos ? 'Show Less' : 'Show More'}
-        </button>
-      )}
+      
+      {/* {photos?.length > 4 && (photos?.slice(0, 4).map((photo, index) => (
+                <div key={index} className='relative h-48 overflow-hidden'>
+                  <Image
+                    onClick={() => openImageViewer(photo)}
+                    loading='lazy'
+                    src={photo}
+                    sizes="(min-width: 980px) 342px, (min-width: 780px) calc(38.89vw - 31px), (min-width: 640px) calc(50vw - 82px), calc(50vw - 50px)"
+                    alt="photo"
+                    fill={true}
+                    quality={100}
+                    className="object-cover cursor-pointer absolute rounded-sm"
+                  />
+                  {index === 3 && photos?.length > 4 && (
+                    <div
+                      onClick={() => setShowAllPhotos(true)}
+                      className='plus-icon cursor-pointer absolute w-12 h-12 bg-gray-700 bg-opacity-90 text-white flex justify-center items-center rounded-full'
+                    >
+                      +{photos?.length - 4}
+                    </div>
+                  )}
+                </div>
+
+      ))
+      )} */}
       {selectedImage && (
         // <ImageViewer imageUrl={selectedImage} onClose={closeImageViewer} />
         <div className="image-viewer">
