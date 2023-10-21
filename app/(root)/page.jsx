@@ -34,6 +34,7 @@ async function Page({searchParams }) {
                 key={post._id}
                 id={post._id}
                 likes={post.likes}
+                repost={post.repost}
                 currentUserId={user.id}
                 currentUser_Id={userInfo._id}
                 parentId={post.parentId}

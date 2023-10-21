@@ -39,6 +39,7 @@ async function Page({ searchParams } :{ searchParams: SearchParams }) {
                 key={question._id}
                 id={question._id}
                 likes={question.likes}
+                repost={question.repost}
                 currentUserId={user.id}
                 currentUser_Id={userInfo._id}
                 parentId={question.parentId}

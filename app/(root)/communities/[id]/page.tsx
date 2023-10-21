@@ -129,7 +129,8 @@ async function page({ params }: { params: { id: string } }) {
               {/* @ts-ignore */}
               {tab.label}
               <CommunityTabs
-                currentUserId={userInfo._id}
+                currentUserId={user.id}
+                currentUser_Id={userInfo._id}
                 communityId={params.id}
                 type={tab.label}
                 accountType="User"

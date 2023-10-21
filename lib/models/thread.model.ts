@@ -16,6 +16,12 @@ const threadSchema = new mongoose.Schema({
     ref: "User",
     }
   ],
+  repost: [
+    {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    }
+  ],
   community: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Community",

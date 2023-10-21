@@ -36,6 +36,7 @@ interface Result {
 
 interface Props {
   currentUserId: string;
+  currentUser_Id: string;
   communityId: string;
   accountType: string;
   type: string;
@@ -49,7 +50,7 @@ interface Members {
   username: string;
 }
 
-async function CommunityTabs({ currentUserId,type, communityId, accountType }: Props) {
+async function CommunityTabs({ currentUserId,type, communityId, accountType,currentUser_Id }: Props) {
   let result: Result;
   let question: Result;
   let members: Members;
@@ -67,7 +68,10 @@ async function CommunityTabs({ currentUserId,type, communityId, accountType }: P
           <ThreadCard
           key={thread._id}
           id={thread._id}
+          likes={thread.likes}
+          repost={thread.repost}
           currentUserId={currentUserId}
+          currentUser_Id={currentUser_Id}
           parentId={thread.parentId}
           content={thread.text}
           author={thread.author}
@@ -83,7 +87,9 @@ async function CommunityTabs({ currentUserId,type, communityId, accountType }: P
             key={question._id}
             id={question._id}
             likes={question.likes}
+            repost={question.repost}
             currentUserId={currentUserId}
+            currentUser_Id={currentUser_Id}
             parentId={question.parentId}
             content={question.text}
             author={question.author}

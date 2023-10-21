@@ -30,6 +30,7 @@ interface Props {
   isComment?: boolean;
   photos?:string[]
   likes?:string[]
+  repost?:string[]
 }
 
 function QuestionCard({
@@ -44,7 +45,8 @@ function QuestionCard({
   comments,
   isComment,
   photos,
-  likes
+  likes,
+  repost
 }: Props) {
   
   return (
@@ -68,7 +70,7 @@ function QuestionCard({
             <div className='thread-card_bar' />
           </div>
 
-          <Content likes={likes} contentType={"questions"} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUser_Id={currentUser_Id}/>
+          <Content likes={likes} repost={repost} contentType={"questions"} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUser_Id={currentUser_Id}/>
 
         </div>
 

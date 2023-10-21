@@ -372,17 +372,16 @@ export async function repostThread(threadId: string, userId: string): Promise<st
     if (!thread) {
       throw new Error('thread not found');
     }
-    console.log(threadId, userId)
-    if (user.repostThread.includes(threadId)) {
+    if (thread.repost.includes(userId)) {
       // User has already repost the thread, so remove the like
-      user.repostThread.pull(threadId);
+      thread.repost.pull(userId);
     } else {
-      user.repostThread.push(threadId);
+      thread.repost.push(userId);
     }
 
     await thread.save();
     
-    return thread.repostThread; // Return the updated list of likes for the question
+    return thread.repost; // Return the updated list of likes for the question
   } catch (error : any ) {
     throw new Error(`Failed to like/unlike question: ${error.message}`);
   }

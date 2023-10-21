@@ -85,6 +85,8 @@ async function ThreadsTab({ currentUserId,currentUser_Id, accountId, accountType
           parentId={thread.parentId}
           content={thread.text}
           likes={thread.likes}
+          repost={thread.repost}
+          photos={thread.photos}
           author={
             accountType === "User"
               ? { name: result.name, image: result.image, id: result.id }
@@ -109,6 +111,7 @@ async function ThreadsTab({ currentUserId,currentUser_Id, accountId, accountType
           key={question._id}
           id={question._id}
           likes={question.likes}
+          repost={question.repost}
           currentUserId={currentUserId}
           currentUser_Id={currentUser_Id}
           parentId={question.parentId}

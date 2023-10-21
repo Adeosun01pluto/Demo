@@ -333,32 +333,6 @@ async function fetchAllChildQuestions(threadId: string): Promise<any[]> {
   }
   
 
-  export async function repostQuestion(questionId: string, userId: string): Promise<string[]> {
-    try {
-      connectToDB(); // Make sure you've implemented your DB connection logic
-  
-      // Check if the user has already repost the thread
-      const question = await Question.findById(questionId);
-      const user = await User.findById(userId);
-      if (!question) {
-        throw new Error('question not found');
-      }
-      console.log(questionId, userId)
-      if (user.repostQuestion.includes(questionId)) {
-        // User has already repost the question, so remove the like
-        user.repostQuestion.pull(questionId);
-      } else {
-        user.repostQuestion.push(questionId);
-      }
-  
-      await question.save();
-      
-      return question.repostQuestion; // Return the updated list of likes for the question
-    } catch (error : any ) {
-      throw new Error(`Failed to like/unlike question: ${error.message}`);
-    }
-  }
-
   export async function likeQuestion(questionId: string, userId: string): Promise<string[]> {
     try {
       connectToDB(); // Make sure you've implemented your DB connection logic
@@ -385,6 +359,31 @@ async function fetchAllChildQuestions(threadId: string): Promise<any[]> {
       await question.save();
       
       return question.likes; // Return the updated list of likes for the question
+    } catch (error : any ) {
+      throw new Error(`Failed to like/unlike question: ${error.message}`);
+    }
+  }
+
+  export async function repostQuestion(questionId: string, userId: string): Promise<string[]> {
+    try {
+      connectToDB(); // Make sure you've implemented your DB connection logic
+  
+      // Check if the user has already repost the thread
+      const question = await Question.findById(questionId);
+      const user = await User.findById(userId);
+      if (!question) {
+        throw new Error('question not found');
+      }
+      if (question.repost.includes(userId)) {
+        // User has already repost the question, so remove the like
+        question.repost.pull(userId);
+      } else {
+        question.repost.push(userId);
+      }
+  
+      await question.save();
+      
+      return question.repost; // Return the updated list of likes for the question
     } catch (error : any ) {
       throw new Error(`Failed to like/unlike question: ${error.message}`);
     }

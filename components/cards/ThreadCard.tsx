@@ -27,6 +27,7 @@ interface Props {
   isComment?: boolean;
   photos?:string[] | [] 
   likes?:string[] | [] 
+  repost?:string[] | [] 
 }
 
 function ThreadCard({
@@ -41,7 +42,8 @@ function ThreadCard({
   comments,
   isComment,
   photos,
-  likes
+  likes,
+  repost
 }: Props) {
   return (
     <article
@@ -64,7 +66,7 @@ function ThreadCard({
             <div className='thread-card_bar' />
           </div>
           <div className="w-full">
-            <Content contentType={"thread"} likes={likes} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUser_Id={currentUser_Id}/>
+            <Content contentType={"thread"} repost={repost} likes={likes} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUser_Id={currentUser_Id}/>
           </div>
         </div>
         <DeleteThread
