@@ -16,7 +16,7 @@ async function Page({searchParams} : { searchParams: SearchParams }) {
   if(!user) return null
 
   const userInfo = await fetchUser(user.id)
-  if(!userInfo?.onboarded) redirect("/onboading")
+  if(!userInfo?.onboarded) redirect("/onboarding")
   const search = typeof searchParams.q === 'string' ? searchParams.q : undefined
   const result  = await fetchUsers({
     userId: user.id,

@@ -13,7 +13,7 @@ async function RightSideBar() {
   if(!user) return null
 
   const userInfo = await fetchUser(user.id)
-  if(!userInfo?.onboarded) redirect("/onboading")
+  if(!userInfo?.onboarded) redirect("/onboarding")
   const result = await fetchCommunities({searchString : "",
   pageNumber : 1,
   pageSize : 20,
