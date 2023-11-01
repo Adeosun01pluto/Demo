@@ -33,6 +33,7 @@ async function page({ params }: { params: { id: string } }) {
           comments={thread.children}
           photos={thread.photos}
           likes={thread.likes}
+          repost={thread.repost}
         />
       </div>
 
@@ -59,6 +60,7 @@ async function page({ params }: { params: { id: string } }) {
             comments={childItem.children}
             photos={thread.photos}
             likes={thread.likes}
+            repost={thread.repost}
             isComment
           />
         ))}

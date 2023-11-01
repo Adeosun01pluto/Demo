@@ -22,7 +22,7 @@ interface Props{
     currentUser_Id:string
 }
 
-export default async function Content({author,photos, isComment, content, id, comments, contentType, currentUser_Id, likes, repost }:Props) {
+export default function Content({author,photos, isComment, content, id, comments, contentType, currentUser_Id, likes, repost }:Props) {
   return (
     <div>
         <div className='flex 500 flex-col'>
