@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { formatDateString } from "@/lib/utils";
 import DeleteQuestion from "../forms/DeleteQuestion";
-import Content from "../forms/Content";
+import QContent from "../forms/QContent";
 
 interface Props {
   id: string;
@@ -52,12 +52,12 @@ function QuestionCard({
   return (
     <article
       className={`flex w-full flex-col rounded-xl ${
-        isComment ? "px-0 xs:px-7" : "bg-dark-2 p-7"
+        isComment ? "px-0 xs:px-5" : "bg-dark-2 p-5"
       }`}
     >
       <div className='flex items-start justify-between'>
-        <div className='flex w-full flex-1 flex-row gap-4'>
-          <div className='flex flex-col items-center'>
+        <div className='flex w-full flex-1 flex-row'>
+          {/* <div className='flex flex-col items-center'>
             <Link href={`/profile/${author.id}`} className='relative h-11 w-11'>
               <Image
                 src={`${author.image}`}
@@ -68,9 +68,9 @@ function QuestionCard({
             </Link>
 
             <div className='thread-card_bar' />
-          </div>
+          </div> */}
 
-          <Content likes={likes} repost={repost} contentType={"questions"} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUser_Id={currentUser_Id}/>
+          <QContent likes={likes} repost={repost} contentType={"questions"} author={author} photos={photos} isComment={isComment} content={content} id={id} comments={comments} currentUser_Id={currentUser_Id}/>
 
         </div>
 
@@ -84,8 +84,8 @@ function QuestionCard({
       </div>
 
       {!isComment && comments.length > 0 && (
-        <div className='ml-1 mt-3 flex items-center gap-2'>
-          {comments.slice(0, 2).map((comment, index) => (
+        <div className='ml-1 mt-3 flex gap-2'>
+          {/* {comments.slice(0, 2).map((comment, index) => (
             <Image
               key={index}
               src={comment.author.image}
@@ -94,11 +94,11 @@ function QuestionCard({
               height={24}
               className={`${index !== 0 && "-ml-5"} rounded-full object-cover`}
             />
-          ))}
+          ))} */}
 
           <Link href={`/questions/${id}`}>
             <p className='mt-1 text-subtle-medium text-gray-1'>
-              {comments.length} repl{comments.length > 1 ? "ies" : "y"}
+              {comments.length} answer{comments.length > 1 ? "" : "s"}
             </p>
           </Link>
         </div>
