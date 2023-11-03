@@ -24,7 +24,22 @@ function DeleteQuestion({
   const router = useRouter();
 
   if (currentUserId !== authorId || pathname === "/") return null;
-
+  const deleteHandler = () => {
+    // Display a confirmation dialog
+    const isConfirmed = window.confirm("Are you sure you want to delete this question?");
+    if (isConfirmed) {
+      // User confirmed, proceed with the deletion
+      deleteQuestion(JSON.parse(threadId), pathname)
+        .then(() => {
+          if (!parentId || !isComment) {
+            router.push(`${pathname}`);
+          }
+        })
+        .catch((error) => {
+          console.error("Error deleting thread:", error);
+        });
+    }
+  };
   return (
     <Image
       src='/assets/delete.svg'
@@ -32,12 +47,8 @@ function DeleteQuestion({
       width={18}
       height={18}
       className='cursor-pointer object-contain'
-      onClick={async () => {
-        await deleteQuestion(JSON.parse(threadId), pathname);
-        if (!parentId || !isComment) {
-          router.push("/");
-        }
-      }}
+      onClick={deleteHandler}
+
     />
   );
 }

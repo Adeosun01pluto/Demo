@@ -75,7 +75,8 @@ async function ThreadsTab({ currentUserId,currentUser_Id, accountId, accountType
   return (
     <section className='mt-9 flex flex-col gap-10'>
       {
-        type === "Threads" ?
+        type === "Threads" ? 
+        result?.threads?.length > 0 ?
       (result?.threads.map((thread :any) => (
         <ThreadCard
           key={thread._id}
@@ -105,7 +106,10 @@ async function ThreadsTab({ currentUserId,currentUser_Id, accountId, accountType
           createdAt={thread.createdAt}
           comments={thread.children}
         />
-      ))) : type === "Questions" ? 
+      ))) : 
+      <p className="text-lg font-light ">No Threads</p> 
+      : type === "Questions" ? 
+      questions?.length > 0 ?
       (questions?.map((question :any)=>(
         <QuestionCard 
           key={question._id}
@@ -122,7 +126,8 @@ async function ThreadsTab({ currentUserId,currentUser_Id, accountId, accountType
           comments={question.children}
           photos={question.photos}    
         />
-      ))) : null
+      ))) : <p className="text-lg font-light ">No Questions</p>
+      : type === "Followers" ? "" : "" 
 
     }
     </section>

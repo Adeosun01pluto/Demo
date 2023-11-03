@@ -145,7 +145,7 @@ async function fetchAllChildQuestions(threadId: string): Promise<any[]> {
   
       // Fetch all child threads and their descendants recursively
       const descendantThreads = await fetchAllChildQuestions(id);
-  
+      
       // Get all descendant thread IDs including the main thread ID and child thread IDs
       const descendantThreadIds = [
         id,
@@ -173,13 +173,13 @@ async function fetchAllChildQuestions(threadId: string): Promise<any[]> {
       // Update User model
       await User.updateMany(
         { _id: { $in: Array.from(uniqueAuthorIds) } },
-        { $pull: { threads: { $in: descendantThreadIds } } }
+        { $pull: { questions: { $in: descendantThreadIds } } }
       );
   
       // Update Community model
       await Community.updateMany(
         { _id: { $in: Array.from(uniqueCommunityIds) } },
-        { $pull: { threads: { $in: descendantThreadIds } } }
+        { $pull: { questions: { $in: descendantThreadIds } } }
       );
   
       revalidatePath(path);

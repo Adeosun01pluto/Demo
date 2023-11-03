@@ -10,7 +10,6 @@ import React from 'react'
 import { communityTabs } from "@/constants";
 import CommunityTabs from "@/components/shared/CommunityTabs";
 import CreateCPost from "@/components/forms/CreateCPost";
-import CAction from "@/components/forms/CAction";
 import C_Action from "@/components/forms/C_Action";
 
 async function page({ params }: { params: { id: string } }) {

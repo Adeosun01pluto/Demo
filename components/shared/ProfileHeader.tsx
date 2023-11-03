@@ -5,6 +5,13 @@ import { Button } from "../ui/button";
 import { Share } from "lucide-react";
 import { followUser, unfollowUser } from "@/lib/actions/user.actions";
 import { useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+ 
 
 interface Props {
   accountId: string;
@@ -50,18 +57,13 @@ function ProfileHeader({
       setFollowersArr(followersArr.filter((follower) => follower !== currentUserId));
     }
   };
-  // const follow = async () =>{
-  //   await followUser(currentUserId, userIdToFollow)
-    
-  //   // Update the followersArr state after following
-  //   setFollowersArr([...followersArr, currentUserId]);
-  // }
-  // const unfollow = async () =>{
-  //   await unfollowUser(currentUserId, userIdToFollow)
-    
-  //   // Update the followersArr state after unfollowing
-  //   setFollowersArr(followersArr.filter((follower) => follower !== currentUserId));
-  // }
+
+  const handleShareClick = () => {
+    // Get the current URL
+    const currentURL = window.location.href;
+    // Copy the URL to the clipboard
+    navigator.clipboard.writeText(currentURL);
+  };
   return (
     <div className='flex w-full flex-col justify-start'>
       <div className='flex items-center justify-between'>
@@ -105,7 +107,18 @@ function ProfileHeader({
               <p className='text-xs text-white'>{followings.length} Followings</p>
             </div>
             <div className='flex gap-2 items-center'>
-              <Share color='white' />
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    {/* <Button variant="outline"> */}
+                    <Share color='white' onClick={handleShareClick} className="cursor-pointer" />
+                    {/* </Button> */}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="font-semibold">Copy URL</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               {
                 currentUserId === userIdToFollow ? 
                 null : 
