@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   title: 'Threads',
   description: 'A Next.js 13 Meta Threads Application',
 }
+import Providers from "./Providers";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 import  "../globals.css"
 import { Metadata } from "next"
@@ -23,6 +25,9 @@ const RootLayout =({
     <ClerkProvider>
       <html lang="en">
         <body>
+        <Providers>
+          {/* <ThemeSwitcher /> */}
+
           <TopBar />
 
           <main className="flex flex-row">
@@ -39,6 +44,7 @@ const RootLayout =({
 
           <BottomBar />
           
+        </Providers>
         </body>
       </html>
     </ClerkProvider>

@@ -41,7 +41,7 @@ function Action({contentType, id, currentUser_Id, likes, isComment, repost }:Pro
     }
     return (
     <div>
-        <div className='flex gap-3.5'>
+        <div className='flex gap-3'>
           {
             isComment? null : likesArr?.includes(currentUser_Id) ? 
             <Image
@@ -62,7 +62,7 @@ function Action({contentType, id, currentUser_Id, likes, isComment, repost }:Pro
             />
           }
           {isComment? null :
-          <span className="text-white">{likesArr?.length}</span>
+          <span className="dark:text-gray-700 text-gray-1">{likesArr?.length}</span>
           }
           <Link href={`/${contentType}/${id}`}>
             <Image
@@ -93,7 +93,7 @@ function Action({contentType, id, currentUser_Id, likes, isComment, repost }:Pro
             />
           }
           {isComment? null :
-          <span className="text-white">{repostArr?.length}</span>
+          <span className="dark:text-gray-700 text-gray-1">{repostArr?.length}</span>
           }
                 {/* <Image
                   src='/assets/repost.svg'

@@ -5,26 +5,26 @@
 @layer components {
   /* main */
   .main-container {
-    @apply flex min-h-screen flex-1 flex-col items-center bg-dark-1 px-2 md:px-6 pb-10 pt-4 md:pt-10 max-md:pb-32 sm:px-10;
+    @apply flex min-h-screen flex-1 flex-col items-center dark:bg-light-1 bg-dark-1 px-2 md:px-6 pb-10 pt-4 md:pt-10 max-md:pb-32 sm:px-10;
   }
   /* Head Text */
   .head-text {
-    @apply text-heading2-bold text-light-1;
+    @apply text-heading2-bold dark:text-dark-1 text-light-1;
   }
 
   /* Activity */
   .activity-card {
-    @apply flex items-center gap-2 rounded-md bg-dark-2 px-7 py-4;
+    @apply flex items-center gap-2 rounded-md dark:bg-light-2 bg-dark-2 px-7 py-4;
   }
 
   /* No Result */
   .no-result {
-    @apply text-center !text-base-regular text-light-3;
+    @apply text-center !text-base-regular dark:text-dark-3 text-light-3;
   }
 
   /* Community Card */
   .community-card {
-    @apply w-full rounded-lg bg-dark-3 px-4 py-5 sm:w-96;
+    @apply w-full rounded-lg dark:bg-light-2 bg-dark-3 px-4 py-5 sm:w-96;
   }
 
   .community-card_btn {
@@ -33,7 +33,7 @@
 
   /* thread card  */
   .thread-card_bar {
-    @apply relative mt-2 w-0.5 grow rounded-full bg-neutral-800;
+    @apply relative mt-2 w-0.5 grow rounded-full dark:bg-neutral-500 bg-neutral-800;
   }
 
   /* User card */
@@ -50,15 +50,18 @@
   }
 
   .searchbar {
-    @apply flex gap-1 rounded-lg bg-dark-3 px-4 py-2;
+    @apply flex gap-1 rounded-lg dark:bg-light-2 bg-dark-3 px-4 py-2;
   }
 
   .searchbar_input {
-    @apply border-none bg-dark-3 text-base-regular text-light-4 outline-none !important;
+    @apply border-none dark:bg-light-2 bg-dark-3 text-base-regular dark:text-dark-4 text-light-4 outline-none !important;
   }
 
   .topbar {
     @apply fixed top-0 z-30 flex w-full items-center justify-between bg-dark-2 px-6 py-3;
+  }
+  .dark_topbar {
+    @apply fixed top-0 z-30 flex w-full items-center justify-between bg-light-1 px-6 py-3;
   }
 
   .bottombar {
@@ -76,6 +79,9 @@
   .leftsidebar {
     @apply sticky left-0 top-0 z-20 flex h-screen w-fit flex-col justify-between overflow-auto border-r border-r-dark-4 bg-dark-2 pb-5 pt-28 max-md:hidden;
   }
+  .dark_leftsidebar {
+    @apply sticky left-0 top-0 z-20 flex h-screen w-fit flex-col justify-between overflow-auto border-r border-r-light-2 bg-light-1 pb-5 pt-28 max-md:hidden;
+  }
 
   .leftsidebar_link {
     @apply relative flex justify-start gap-4 rounded-lg py-3 px-4;
@@ -86,7 +92,7 @@
   }
 
   .rightsidebar {
-    @apply sticky right-0 top-0 z-20 flex h-screen w-fit flex-col justify-between gap-12 overflow-auto border-l border-l-dark-4 bg-dark-2 px-5 pb-6 pt-28 max-xl:hidden;
+    @apply sticky right-0 top-0 z-20 flex h-screen w-fit flex-col justify-between gap-12 overflow-auto border-l border-l-dark-4 dark:border-l-light-2 dark:bg-light-1 bg-dark-2 px-5 pb-6 pt-28 max-xl:hidden;
   }
 }
 
@@ -152,7 +158,7 @@
 
 /* Comment Form */
 .comment-form {
-  @apply mt-10 flex items-center gap-4 border-y border-y-dark-4 py-5 max-xs:flex-col !important;
+  @apply mt-10 flex items-center gap-4 border-y dark:border-y-light-4 border-y-dark-4 py-3 max-xs:flex-col !important;
 }
 
 .comment-form_btn {

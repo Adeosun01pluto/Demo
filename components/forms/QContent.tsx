@@ -26,27 +26,36 @@ export default function QContent({author,photos, isComment, content, id, comment
   return (
     <div>
         <div className='flex flex-col'>
-            {/* <Link href={`/profile/${author.id}`} className='w-fit'>
-              <h4 className='cursor-pointer text-base-semibold text-light-1'>
-                {author.name}
-              </h4>
-            </Link> */}
-
-            <p className={` ${isComment? "text-md font-semibold" : "text-md md:text-lg font-bold"} text-white`}>{content}</p>
+        {isComment? 
+            <div className="flex gap-2 items-center mb-2">
+              <Link href={`/profile/${author.id}`} className='relative h-8 w-8'>
+                <Image
+                  src={`${author.image}`}
+                  alt='user_community_image'
+                  fill
+                  className='cursor-pointer object-cover rounded-full'
+                />
+              </Link>
+              <p className=" dark:text-dark-2 text-light-2">{author.name}</p>
+            </div>
+            :null
+          }
+            
+            <p className={` ${isComment? "text-md" : "text-md md:text-lg font-bold"} dark:text-dark-2 text-light-2`}>{content}</p>
             {photos?.length > 0 ?
             <div className=" w-full">
               <ImageCard photos={photos} isComment={isComment} />
             </div> : null
             }
-            <div className={`${isComment && "mb-10"} mt-5 flex flex-col items-start gap-3`}>
+            <div className={`${isComment && ""} mt-3 flex flex-col items-start gap-3`}>
               <Action contentType={contentType} repost={repost} isComment={isComment} likes={likes} currentUser_Id={currentUser_Id} id={id}/>
-              {isComment && comments.length > 0 && (
+              {/* {isComment && comments.length > 0 && (
                 <Link href={`/${contentType}/${id}`}>
-                  <p className='mt-1 text-subtle-medium text-gray-1'>
+                  <p className='mt-1 text-subtle-medium dark:text-dark-1'>
                     {comments.length} repl{comments.length > 1 ? "ies" : "y"}
                   </p>
                 </Link>
-              )}
+              )} */}
             </div>
         </div>
     </div>

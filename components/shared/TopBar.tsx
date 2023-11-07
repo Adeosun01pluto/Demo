@@ -18,10 +18,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "../ui/button"
 import { Cloud, CreditCard, Github, Keyboard, LifeBuoy, LogOut, Mail, MessageSquare, Plus, PlusCircle, Settings, User, UserPlus, Users } from "lucide-react"
+import ThemeSwitcher from "@/app/(root)/ThemeSwitcher"
 
 function TopBar() {
   return (
-    <nav className="topbar">
+    <nav className="topbar dark:dark_topbar">
       <Link href="/" className="flex items-center gap-4">
         <Image
           src="/assets/logo.svg"
@@ -29,10 +30,17 @@ function TopBar() {
           width={28}
           height={28} 
         />
-        <p className="text-heading3-bold text-light-1 max-xs:hidden">Demo</p>
+        <p className="text-heading3-bold text-light-1 dark:text-dark-1 max-xs:hidden">Demo</p>
       </Link>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-3">
+        <ThemeSwitcher />
+        <UserButton 
+          appearance={{
+            baseTheme: dark
+          }}
+          afterMultiSessionSingleSignOutUrl={"/"}
+        />
         <div className="block md:hidden">
           <SignedIn>
             <SignOutButton>
@@ -47,12 +55,7 @@ function TopBar() {
             </SignOutButton>
           </SignedIn>
         </div>
-        <UserButton 
-          appearance={{
-            baseTheme: dark
-          }}
-          afterMultiSessionSingleSignOutUrl={"/"}
-        />
+
         {/* <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline">Open</Button>

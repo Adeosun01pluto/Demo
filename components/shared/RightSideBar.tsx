@@ -28,7 +28,7 @@ async function RightSideBar() {
   return (
     <section className="custom-scrollbar rightsidebar">
       <div className="flex flex-1 flex-col justify-start">
-        <h3 className="text-heading4-medium text-light-1">Suggested Comunities</h3>
+        <h3 className="text-heading4-medium dark:text-dark-1 text-light-1">Suggested Comunities</h3>
         {
           result.communities.map((community)=>(
             <article key={community._id} className='flex mt-3 w-full items-center gap-2'>
@@ -52,7 +52,7 @@ async function RightSideBar() {
 
                     <div>
                       <Link href={`/communities/${community._id}`}>
-                        <h4 className='text-sm font-semibold text-light-1'>{community.name}</h4>
+                        <h4 className='text-sm font-semibold dark:text-dark-1 text-light-1'>{community.name}</h4>
                       </Link>
                       <p className='text-xs text-gray-1'>@{community.username}</p>
                     </div>
@@ -68,7 +68,7 @@ async function RightSideBar() {
       </div>
 
       <div className="flex flex-1 flex-col justify-start">
-        <h3 className="text-heading4-medium text-light-1">Suggested Users</h3>
+        <h3 className="text-heading4-medium dark:text-dark-1 text-light-1">Suggested Users</h3>
           <div>
             {users.users.map((person)=>(
                 <article key={person._id} className='user-card my-2'>
@@ -83,7 +83,7 @@ async function RightSideBar() {
                     </div>
             
                     <div className='flex-1 text-ellipsis'>
-                      <h4 className='text-sm font-semibold text-light-1'>{person.name}</h4>
+                      <h4 className='text-sm font-semibold dark:text-dark-1 text-light-1'>{person.name}</h4>
                       <p className='text-xs text-gray-1'>@{person.username}</p>
                     </div>
                   </div>

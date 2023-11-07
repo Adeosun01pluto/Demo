@@ -25,8 +25,8 @@ async function page({ params }: { params: { id: string } }) {
       </div>
 
       {/* Header */}
-      <div className='flex w-full flex-col justify-start'>
-        <div className='relative h-[250px] w-full mb-4'>
+      <div className='flex w-full flex-col justify-start bg-primary-500'>
+        <div className='relative h-[250px] w-full'>
           {result.profile?
             <Image
             src={result.profile}
@@ -42,10 +42,10 @@ async function page({ params }: { params: { id: string } }) {
             />
           }
         </div>
-        <div className='flex items-center justify-between'>
+        <div className='flex items-center justify-between p-3'>
           <div className='flex items-center'>
             <div className='flex-1'>
-              <h2 className='text-left text-heading3-bold text-light-1'>
+              <h2 className='text-left text-heading3-bold dark:text-dark-1 text-light-1'>
                 {result.name}
               </h2>
               <p className='text-base-medium text-gray-1'>@{result.username}</p>
@@ -66,9 +66,8 @@ async function page({ params }: { params: { id: string } }) {
             </Link>
           ) : null}
         </div>
-
-        <p className='my-2 max-w-lg text-sm text-light-2'>{result.description}</p>
-        <div className='w-full justify-between h-12 flex items-center'>
+        <p className=' max-w-lg text-sm dark:text-dark-2 text-light-2 p-3'>{result.description}</p>
+        <div className='w-full justify-between h-12 flex items-center p-3'>
             <div className=' flex gap-3 items-center'>
               {/* <div className='w-24 h-8 bg-white'></div> */}
               <p className='text-sm text-white font-semibold'>{result.members.length} Members</p>
@@ -89,7 +88,7 @@ async function page({ params }: { params: { id: string } }) {
             </div> */}
             </div>
         </div>
-        <div className='mt-8 h-0.5 w-full bg-dark-3' />
+        <div className='mt-8 h-0.5 w-full dark:bg-light-2 bg-dark-3' />
       </div>
 
       <div className='mt-2'>

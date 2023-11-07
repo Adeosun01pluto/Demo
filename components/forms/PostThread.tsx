@@ -147,10 +147,10 @@ function PostThread({ userId, communityId }: Props) {
             name='thread'
             render={({ field }) => (
               <FormItem className='flex w-full flex-col gap-3'>
-                <FormLabel className='text-base-semibold text-light-2'>
+                <FormLabel className='text-base-semibold dark:text-dark-2 text-lg text-light-2'>
                   Content
                 </FormLabel>
-                <FormControl className='no-focus border border-dark-4 bg-dark-3 text-light-1'>
+                <FormControl className='no-focus border border-dark-4 dark:border-none dark:text-dark-1 dark:bg-light-2  bg-dark-3 text-light-1'>
                   <Textarea rows={15} {...field} />
                 </FormControl>
                 <FormMessage />
@@ -187,7 +187,7 @@ function PostThread({ userId, communityId }: Props) {
                     />
                   )}
                 </FormLabel>
-                <FormControl className='flex-1 text-base-semibold text-gray-200'>
+                <FormControl className='flex-1 text-base-semibold dark:text-dark-2 text-light-2'>
                   <Input
                     type='file'
                     accept='image/*'
@@ -201,7 +201,7 @@ function PostThread({ userId, communityId }: Props) {
             )}
           />
           {isLoading? 
-          <Button type='submit' className={`w-full flex justify-center bg-primary-500`}>
+          <Button type='submit' className={`w-full flex justify-center dark:bg-primary-500 dark:text-light-1 text-light-1 bg-primary-500`}>
             <ThreeDots 
               height="50" 
               width="50" 
@@ -213,7 +213,7 @@ function PostThread({ userId, communityId }: Props) {
               visible={true}
             />
           </Button> :
-          <Button type='submit' className={`bg-primary-500 `}>
+          <Button type='submit' className={`dark:bg-primary-500 dark:text-light-1 text-light-1 bg-primary-500 `}>
             Post Thread
           </Button>
         }

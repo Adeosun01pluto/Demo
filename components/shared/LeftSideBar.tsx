@@ -14,7 +14,7 @@ const LeftSidebar = () => {
   const { userId } = useAuth();
 
   return (
-    <section className='custom-scrollbar leftsidebar'>
+    <section className='custom-scrollbar dark:dark_leftsidebar leftsidebar'>
       <div className='flex w-full flex-1 flex-col gap-4 px-6'>
         {sidebarLinks.map((link) => {
           const isActive =
@@ -27,7 +27,7 @@ const LeftSidebar = () => {
             <Link
               href={link.route}
               key={link.label}
-              className={`leftsidebar_link ${isActive && "bg-primary-500 "}`}
+              className={`leftsidebar_link ${isActive && "bg-primary-500"}`}
             >
               <Image
                 src={link.imgURL}
@@ -36,7 +36,7 @@ const LeftSidebar = () => {
                 height={24}
               />
 
-              <p className='text-light-1 flex-1 max-lg:hidden'>{link.label}</p>
+              <p className={`${isActive && "dark:text-light-1"} text-light-1 dark:text-dark-1 text-xl flex-1 max-lg:hidden`}>{link.label}</p>
             </Link>
           );
         })}
@@ -53,7 +53,7 @@ const LeftSidebar = () => {
                 height={24}
               />
 
-              <p className='text-light-2 flex-1 max-lg:hidden'>Logout</p>
+              <p className='text-light-2 dark:text-dark-2 text-lg flex-1 max-lg:hidden'>Logout</p>
             </div>
           </SignOutButton>
         </SignedIn>

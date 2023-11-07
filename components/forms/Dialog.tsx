@@ -30,6 +30,7 @@ import {
 import { Input } from "../ui/input";
 import Image from "next/image";
 import { createCommunity } from "@/lib/actions/community.actions";
+import { ThreeDots } from "react-loader-spinner";
   
 interface Props {
     currentUserId : string
@@ -43,6 +44,9 @@ function Dialog({currentUserId}: Props) {
   const [files, setFiles] = useState<File[]>([]);
   const [image, setImage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [isAlertVisible, setAlertVisible] = useState(false);
+  const [alertType, setAlertType] = useState('success'); // You can set the alert type (e.g., success, error)
+  const [alertMessage, setAlertMessage] = useState('');
   const form = useForm<z.infer<typeof CommunityValidation>>({
     resolver: zodResolver(CommunityValidation),
     defaultValues: {
@@ -52,28 +56,45 @@ function Dialog({currentUserId}: Props) {
       picture: "",
     },
   });
+  const showAlert = (type: string, message: string) => {
+    setAlertType(type);
+    setAlertMessage(message);
+    setAlertVisible(true);
 
+    // Hide the alert after 5 seconds (you can adjust the duration)
+    setTimeout(() => {
+      setAlertVisible(false);
+    }, 2000);
+  };
   const onSubmit = async (values: z.infer<typeof CommunityValidation>) => {
     setIsLoading(true)
-    const blob = values.picture;
-    const hasImageChanged = isBase64Image(blob);
-    let image : string | ""
-    if (hasImageChanged) {
-      const imgRes = await startUpload(files);
-      if (imgRes && imgRes[0] && imgRes[0].fileUrl) {
-        image = imgRes[0].url;
+    try {
+      const blob = values.picture;
+      const hasImageChanged = isBase64Image(blob);
+      let image : string | ""
+      if (hasImageChanged) {
+        const imgRes = await startUpload(files);
+        if (imgRes && imgRes[0] && imgRes[0].fileUrl) {
+          image = imgRes[0].url;
+        }
       }
+      const res = await createCommunity({
+        id: "",
+        name: values.name,
+        username: values.username,
+        image,
+        description: values.description,
+        createdById: currentUserId,
+      });
+      setIsLoading(false)
+      showAlert('success', 'Community is created successfully!');
+      router.push(`/communities/${res._id}`);
+      
+    } catch (error) {
+      setIsLoading(false)
+      showAlert('Error', 'Failed to create Comumunity !');
+      console.log(error)
     }
-    const res = await createCommunity({
-      id: "",
-      name: values.name,
-      username: values.username,
-      image,
-      description: values.description,
-      createdById: currentUserId,
-    });
-    // setIsLoading(true)
-    router.push(`/communities/${res._id}`);
   };
   const handleImage = (e:ChangeEvent<HTMLInputElement>, fieldChange:(value:string)=>void) => {
     e.preventDefault();
@@ -99,13 +120,11 @@ function Dialog({currentUserId}: Props) {
     <div>
         <div>
       {/* <!-- Button trigger modal --> */}
-      <TERipple rippleColor="white">
-        <Button 
-          type="button"
-          className=" bg-primary-500 leftsidebar_link inline-block rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-          onClick={() => setShowModal(true)}
-        >Create Community</Button>
-      </TERipple>
+      <button 
+        type="button"
+        className=" dark:bg-primary-500 bg-primary-500 inline-block rounded px-6 pb-2 pt-2.5 text-md font-medium dark:text-white text-white"
+        onClick={() => setShowModal(true)}
+      >Create Community</button>
 
       {/* <!-- Modal --> */}
       <TEModal show={showModal} setShow={setShowModal}>
@@ -140,7 +159,7 @@ function Dialog({currentUserId}: Props) {
               </button>
             </TEModalHeader>
             {/* <!--Modal body--> */}
-            <TEModalBody className="bg-black">
+            <TEModalBody className="dark:bg-light-2 bg-black">
             <Form {...form}>
                 <form
                     className='flex flex-col justify-start gap-5'
@@ -150,11 +169,11 @@ function Dialog({currentUserId}: Props) {
                     control={form.control}
                     name='name'
                     render={({ field }) => (
-                        <FormItem className='flex w-full flex-col gap-3'>
-                        <FormLabel className='text-base-semibold text-light-2'>
+                        <FormItem className='flex w-full flex-col gap-1'>
+                        <FormLabel className='text-base-semibold dark:text-dark-2 text-md text-light-2'>
                             Name of your Community
                         </FormLabel>
-                        <FormControl className='no-focus border border-dark-4 bg-dark-3 text-light-1'>
+                        <FormControl className='no-focus border border-dark-4 dark:bg-light-2 dark:text-dark-1 bg-dark-3 text-light-1'>
                         <Input
                             type='text'
                             className=''
@@ -169,11 +188,11 @@ function Dialog({currentUserId}: Props) {
                     control={form.control}
                     name='username'
                     render={({ field }) => (
-                        <FormItem className='flex w-full flex-col gap-3'>
-                        <FormLabel className='text-base-semibold text-light-2'>
+                        <FormItem className='flex w-full flex-col gap-1'>
+                        <FormLabel className='text-base-semibold dark:text-dark-2 text-md text-light-2'>
                             Username
                         </FormLabel>
-                        <FormControl className='no-focus border border-dark-4 bg-dark-3 text-light-1'>
+                        <FormControl className='no-focus border border-dark-4 dark:bg-light-2 dark:text-dark-1 bg-dark-3 text-light-1'>
                         <Input
                             type='text'
                             className=''
@@ -188,11 +207,11 @@ function Dialog({currentUserId}: Props) {
                     control={form.control}
                     name='description'
                     render={({ field }) => (
-                        <FormItem className='flex w-full flex-col gap-3'>
-                        <FormLabel className='text-base-semibold text-light-2'>
+                        <FormItem className='flex w-full flex-col gap-1'>
+                        <FormLabel className='text-base-semibold dark:text-dark-2 text-md text-light-2'>
                             Description
                         </FormLabel>
-                        <FormControl className='no-focus border border-dark-4 bg-dark-3 text-light-1'>
+                        <FormControl className='no-focus border border-dark-4 dark:bg-light-2 dark:text-dark-1 bg-dark-3 text-light-1'>
                             <Textarea rows={5} {...field} />
                         </FormControl>
                         <FormMessage />
@@ -224,7 +243,7 @@ function Dialog({currentUserId}: Props) {
                             />
                             )}
                         </FormLabel>
-                        <FormControl className='flex-1 text-base-semibold text-gray-200'>
+                        <FormControl className='flex-1 text-base-semibold text-light-2 dark:text-dark-1'>
                             <Input
                             type='file'
                             accept='image/*'
@@ -237,28 +256,39 @@ function Dialog({currentUserId}: Props) {
                         </FormItem>
                     )}
                     />
-                    {/* <TERipple rippleColor="light"> */}
-                    <Button
-                    type="submit"
-                    className="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                    >
-                      Create
-                    </Button>
-                {/* </TERipple> */}
+                    {/*  */}
+                    {isLoading? 
+                      <Button type='submit' className={`w-full flex justify-center dark:bg-primary-500 dark:text-light-1 text-light-1 bg-primary-500`}>
+                        <ThreeDots 
+                          height="50" 
+                          width="50" 
+                          radius="9"
+                          color="#fff" 
+                          ariaLabel="three-dots-loading"
+                          wrapperStyle={{}}
+                          // wrapperClassName=""
+                          visible={true}
+                        />
+                      </Button> :
+                      <Button type='submit' className={`dark:bg-primary-500 dark:text-light-1 text-md text-light-1 bg-primary-500 `}>
+                        Create
+                      </Button>
+                    }
                 </form>
+                <div className='absolute bottom-[50px] z-[9999] right-0 flex flex-col justify-start gap-5'>
+                  {isAlertVisible && (
+                    <div
+                      className={`alert-${alertType} bg-opacity-50 bg-${
+                        alertType === 'success' ? 'green' : 'red'
+                      }-700 p-4 rounded-lg`}
+                    >
+                      {alertMessage}
+                    </div>
+                  )
+                  }
+                </div>
                 </Form>
             </TEModalBody>
-            {/* <TEModalFooter>
-              <TERipple rippleColor="light">
-                <button
-                  type="button"
-                  className="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200"
-                  onClick={() => setShowModal(false)}
-                >
-                  Close
-                </button>
-              </TERipple>
-            </TEModalFooter> */}
           </TEModalContent>
         </TEModalDialog>
       </TEModal>

@@ -27,7 +27,7 @@ async function Page({searchParams} : { searchParams: SearchParams }) {
 
   return (
     <section>
-      <h1 className='head-text mb-10'>Search</h1>
+      <h1 className='head-text mb-10 dark:text-dark-1 text-light-1'>Search</h1>
       {/* <SearchTabs /> */}
       <Searchbar routeType="search" />
       {/* Search Bar */}

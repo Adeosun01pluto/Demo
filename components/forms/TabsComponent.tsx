@@ -8,19 +8,19 @@ function TabsComponent({_id}: {_id :string}) {
     const [activeTab, setActiveTab] = useState("create thread")
     return (
     <div>
-        <Tabs defaultValue="create thread" className="text-white w-[100%]">
+        <Tabs defaultValue="create thread" className="text-light-1 w-[100%]">
             <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger onClick={()=>setActiveTab("create thread")}
-                    className={`rounded-sm p-2 font-semibold text-md ${
-                    activeTab === 'create thread' ? 'bg-primary-500' : ''
+                    className={`rounded-sm p-2 font-semibold text-md  text-light-1 ${
+                    activeTab === 'create thread' ? 'bg-primary-500' : 'dark:text-dark-1 text-light-1 border-[1px] border-primary-500'
                     }`}
                     value="create thread"
                 >
                     Create Thread
                 </TabsTrigger>
                 <TabsTrigger onClick={()=>setActiveTab("create question")}
-                    className={`rounded-sm p-2 font-semibold text-md ${
-                    activeTab === 'create question' ? 'bg-primary-500' : ''
+                    className={`rounded-sm p-2 font-semibold text-md text-light-1 ${
+                    activeTab === 'create question' ? 'bg-primary-500' : 'dark:text-dark-1 text-light-1 border-[1px] border-primary-500'
                     }`}
                     value="create question"
                 >
