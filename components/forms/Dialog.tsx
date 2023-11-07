@@ -121,8 +121,7 @@ function Dialog({currentUserId}: Props) {
         <div>
       {/* <!-- Button trigger modal --> */}
       <button 
-        type="button"
-        className=" dark:bg-primary-500 bg-primary-500 inline-block rounded px-6 pb-2 pt-2.5 text-md font-medium dark:text-white text-white"
+        className=" dark:bg-[#ab3045] bg-[#ab3045] inline-block rounded px-6 pb-2 pt-2.5 text-md font-medium dark:text-white text-white"
         onClick={() => setShowModal(true)}
       >Create Community</button>
 

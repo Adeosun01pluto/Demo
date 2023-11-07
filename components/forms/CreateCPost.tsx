@@ -82,10 +82,12 @@ function CreateCPost({currentUserId, communityId}: Props) {
                     </TabsList>
                     <TabsContent value="create thread">
                         {/* <h2 className="">Create Thread</h2> */}
+                        {/* @ts-ignore */}
                         <PostThread setShowModal={setShowModal} communityId={communityId} userId={currentUserId} />
                     </TabsContent>
                     <TabsContent value="create question">
                         {/* <h2 className="">Create Question</h2> */}
+                        {/* @ts-ignore */}
                         <PostQuestion setShowModal={setShowModal} communityId={communityId} userId={currentUserId} />
                     </TabsContent>
                 </Tabs>

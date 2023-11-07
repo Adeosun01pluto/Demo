@@ -4,19 +4,53 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { SignOutButton, SignedIn, useAuth } from "@clerk/nextjs";
+import { useTheme } from "next-themes";
 
-import { sidebarLinks } from "@/constants";
+// import { sidebarLinks } from "@/constants";
 
 const LeftSidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const { theme, setTheme } = useTheme()
+  const sidebarLinks = [
+    {
+      imgURL: theme === "dark" ? "/assets/home_icon.svg" : "/assets/home.svg",
+      route: "/",
+      label: "Home",
+    },
+    {
+      imgURL: theme === "dark" ? "/assets/question_icon.svg" : "/assets/question-square.svg",
+      route: "/questions",
+      label: "Questions",
+    },
+    {
+      imgURL: theme === "dark" ? "/assets/create_icon.svg" : "/assets/create.svg",
+      route: "/create-thread",
+      label: "Create",
+    },
+    {
+      imgURL: theme === "dark" ? "/assets/search_icon.svg" : "/assets/search.svg",
+      route: "/search",
+      label: "Search",
+    },
+    {
+      imgURL: theme === "dark" ? "/assets/community_icon.svg" : "/assets/community.svg",
+      route: "/communities",
+      label: "Communities",
+    },
+    {
+      imgURL: theme === "dark" ? "/assets/profile_icon.svg" : "/assets/user.svg",
+      route: "/profile",
+      label: "Profile",
+    },
+];
 
   const { userId } = useAuth();
 
   return (
     <section className='custom-scrollbar dark:dark_leftsidebar leftsidebar'>
       <div className='flex w-full flex-1 flex-col gap-4 px-6'>
-        {sidebarLinks.map((link) => {
+        {sidebarLinks?.map((link) => {
           const isActive =
             (pathname.includes(link.route) && link.route.length > 1) ||
             pathname === link.route;
@@ -47,7 +81,7 @@ const LeftSidebar = () => {
           <SignOutButton signOutCallback={() => router.push("/sign-in")}>
             <div className='flex cursor-pointer gap-4 p-4'>
               <Image
-                src='/assets/logout.svg'
+                src={theme === "dark" ? "/assets/logout-dark.svg" :"/assets/logout.svg"}
                 alt='logout'
                 width={24}
                 height={24}

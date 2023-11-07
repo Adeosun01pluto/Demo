@@ -21,6 +21,8 @@ import { Cloud, CreditCard, Github, Keyboard, LifeBuoy, LogOut, Mail, MessageSqu
 import ThemeSwitcher from "@/app/(root)/ThemeSwitcher"
 
 function TopBar() {
+  // const { theme, setTheme } = useTheme()
+
   return (
     <nav className="topbar dark:dark_topbar">
       <Link href="/" className="flex items-center gap-4">
@@ -46,7 +48,7 @@ function TopBar() {
             <SignOutButton>
               <div className="flex cursor-pointer">
                 <Image
-                  src="/assets/logout.svg"
+                  src={"/assets/logout-dark.svg"}
                   alt="logout"
                   width={24}
                   height={24}

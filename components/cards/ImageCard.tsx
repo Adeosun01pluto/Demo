@@ -22,6 +22,7 @@ function ImageCard({ photos, isComment }: Props) {
   // Add an event listener to close the viewer when clicking outside the image container
   useEffect(() => {
     const handleClickOutside = (event : any) => {
+      // @ts-ignore
       if (selectedImage && !document.querySelector('.image-container').contains(event.target)) {
         closeImageViewer();
       }
