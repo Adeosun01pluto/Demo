@@ -25,7 +25,7 @@ async function page({ params }: { params: { id: string } }) {
       </div>
 
       {/* Header */}
-      <div className='flex w-full flex-col justify-start bg-primary-500'>
+      <div className='flex w-full flex-col justify-start dark:bg-light-2'>
         <div className='relative h-[250px] w-full'>
           {result.profile?
             <Image
@@ -53,7 +53,7 @@ async function page({ params }: { params: { id: string } }) {
           </div>
           {user.id === result.createdBy.id ? (
             <Link href={`/communities/edit/${params.id}`}>
-              <div className='flex cursor-pointer gap-3 rounded-lg bg-dark-3 px-4 py-2'>
+              <div className='flex cursor-pointer gap-3 rounded-lg dark:bg-light-1 bg-dark-3 px-4 py-2'>
                 <Image
                   src='/assets/edit.svg'
                   alt='logout'
@@ -61,13 +61,13 @@ async function page({ params }: { params: { id: string } }) {
                   height={16}
                   quality={100}
                 />
-                <p className='text-light-2 max-sm:hidden'>Edit</p>
+                <p className='dark:text-dark-2 text-light-2 max-sm:hidden'>Edit</p>
               </div>
             </Link>
           ) : null}
         </div>
-        <p className=' max-w-lg text-sm dark:text-dark-2 text-light-2 p-3'>{result.description}</p>
-        <div className='w-full justify-between h-12 flex items-center p-3'>
+        <p className=' max-w-lg text-sm dark:text-dark-2 text-light-2 px-3'>{result.description}</p>
+        <div className='w-full justify-between h-12 flex items-center px-3'>
             <div className=' flex gap-3 items-center'>
               {/* <div className='w-24 h-8 bg-white'></div> */}
               <p className='text-sm text-white font-semibold'>{result.members.length} Members</p>
@@ -88,7 +88,7 @@ async function page({ params }: { params: { id: string } }) {
             </div> */}
             </div>
         </div>
-        <div className='mt-8 h-0.5 w-full dark:bg-light-2 bg-dark-3' />
+        <div className='mt-2 h-0.5 w-full dark:bg-primary-500 bg-dark-3' />
       </div>
 
       <div className='mt-2'>
@@ -106,12 +106,12 @@ async function page({ params }: { params: { id: string } }) {
                 <p className='max-sm:hidden'>{tab.label}</p>
 
                 {tab.label === "Threads" && (
-                  <p className='ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2'>
+                  <p className='ml-1 rounded-sm dark:bg-primary-500 bg-light-4 px-2 py-1 !text-tiny-medium text-light-2'>
                     {result.threads.length}
                   </p>
                 )}
                 {tab.label === "Questions" && (
-                  <p className='ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2'>
+                  <p className='ml-1 rounded-sm dark:bg-primary-500 bg-light-4 px-2 py-1 !text-tiny-medium text-light-2'>
                     {result.questions?.length}
                   </p>
                 )}

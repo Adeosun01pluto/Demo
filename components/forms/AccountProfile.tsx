@@ -20,6 +20,7 @@ import { isBase64Image } from "@/lib/utils";
 import { useUploadThing } from "@/lib/uploadthing";
 import { updateUser } from "@/lib/actions/user.actions";
 import { z } from "zod";
+import { ThreeDots } from "react-loader-spinner";
 
 interface Props {
     user: {
@@ -38,7 +39,21 @@ function AccountProfile({user, btnTitle} : Props) {
     const pathname = usePathname();
     const { startUpload } = useUploadThing("media");
     const [files, setFiles] = useState<File[]>([]);
-
+    const [isLoading, setIsLoading] = useState<Boolean>(false);
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [alertType, setAlertType] = useState('success'); // You can set the alert type (e.g., success, error)
+    const [alertMessage, setAlertMessage] = useState('');
+    const showAlert = (type: string, message: string) => {
+      setAlertType(type);
+      setAlertMessage(message);
+      setAlertVisible(true);
+  
+      // Hide the alert after 5 seconds (you can adjust the duration)
+      setTimeout(() => {
+        setAlertVisible(false);
+      }, 2000);
+    };
+    
     const form = useForm({
         resolver: zodResolver(UserValidation),
         defaultValues: {
@@ -50,29 +65,38 @@ function AccountProfile({user, btnTitle} : Props) {
     })
     
     const onSubmit = async (values: z.infer<typeof UserValidation>) => {
-      const blob = values.profile_photo;
-      const hasImageChanged = isBase64Image(blob);
-      if (hasImageChanged) {
-        const imgRes = await startUpload(files);
+      setIsLoading(true)
+      try {
+        const blob = values.profile_photo;
+        const hasImageChanged = isBase64Image(blob);
+        if (hasImageChanged) {
+          const imgRes = await startUpload(files);
 
-        if (imgRes && imgRes[0].fileUrl) {
-          values.profile_photo = imgRes[0].fileUrl;
+          if (imgRes && imgRes[0].fileUrl) {
+            values.profile_photo = imgRes[0].fileUrl;
+          }
         }
-      }
-      // TODO : update user profile
-      await updateUser({
-        name: values.name,
-        path: pathname,
-        username: values.username,
-        userId: user.id,
-        bio: values.bio,
-        image: values.profile_photo,
-      });
-      if (pathname === "/profile/edit") {
-        router.back();
-      } else {
-        router.push("/");
-      }
+        // TODO : update user profile
+        await updateUser({
+          name: values.name,
+          path: pathname,
+          username: values.username,
+          userId: user.id,
+          bio: values.bio,
+          image: values.profile_photo,
+        });
+        setIsLoading(false)
+        showAlert('success', 'Profile is Updated Successfully!');  
+        if (pathname === "/profile/edit") {
+          router.back();
+        } else {
+          router.push("/");
+        }
+    } catch (error) {
+      setIsLoading(false)
+      showAlert('Error', 'Failed to updated Profile !');
+      console.log(error)
+    }
     };
 
     const handleImage = (e:ChangeEvent<HTMLInputElement>, fieldChange:(value:string)=>void) => {
@@ -98,7 +122,7 @@ function AccountProfile({user, btnTitle} : Props) {
     return (
         <Form {...form}>
       <form
-        className='flex flex-col p-4 sm:p-10 md:w-[65%] mx-auto justify-start gap-4 md:gap-10'
+        className='flex flex-col p-4 sm:p-10 md:w-[75%] mx-auto justify-start gap-4 md:gap-10'
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
@@ -126,7 +150,7 @@ function AccountProfile({user, btnTitle} : Props) {
                   />
                 )}
               </FormLabel>
-              <FormControl className='flex-1 text-base-semibold text-gray-200'>
+              <FormControl className='flex-1 text-base-semibold dark:text-dark-1 text-light-2'>
                 <Input
                   type='file'
                   accept='image/*'
@@ -144,7 +168,7 @@ function AccountProfile({user, btnTitle} : Props) {
           name='name'
           render={({ field }) => (
             <FormItem className='flex w-full flex-col gap-3'>
-              <FormLabel className='text-base-semibold text-light-2'>
+              <FormLabel className='text-base-semibold dark:text-dark-1 text-light-2'>
                 Name
               </FormLabel>
               <FormControl>
@@ -164,7 +188,7 @@ function AccountProfile({user, btnTitle} : Props) {
           name='username'
           render={({ field }) => (
             <FormItem className='flex w-full flex-col gap-3'>
-              <FormLabel className='text-base-semibold text-light-2'>
+              <FormLabel className='text-base-semibold dark:text-dark-1 text-light-2'>
                 Username
               </FormLabel>
               <FormControl>
@@ -184,7 +208,7 @@ function AccountProfile({user, btnTitle} : Props) {
           name='bio'
           render={({ field }) => (
             <FormItem className='flex w-full flex-col gap-3'>
-              <FormLabel className='text-base-semibold text-light-2'>
+              <FormLabel className='text-base-semibold dark:text-dark-1 text-light-2'>
                 Bio
               </FormLabel>
               <FormControl>
@@ -198,10 +222,36 @@ function AccountProfile({user, btnTitle} : Props) {
             </FormItem>
           )}
         />
-
-        <Button type='submit' className='bg-primary-500'>
-          {btnTitle}
-        </Button>
+        {isLoading? 
+            <Button type='submit' className={`w-full flex justify-center dark:bg-primary-500 dark:text-light-1 text-light-1 bg-primary-500`}>
+              <ThreeDots 
+                height="50" 
+                width="50" 
+                radius="9"
+                color="#fff" 
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                // wrapperClassName=""
+                visible={true}
+              />
+            </Button> :
+            <Button type='submit' className='dark:bg-primary-500 text-light-1 dark:text-light-1 bg-primary-500'>
+            {btnTitle}
+          </Button>
+          }
+        
+        <div className='absolute bottom-[50px] z-[9999] right-0 flex flex-col justify-start gap-5'>
+          {isAlertVisible && (
+            <div
+              className={`alert-${alertType} bg-opacity-50 bg-${
+                alertType === 'success' ? 'green' : 'red'
+              }-700 p-4 rounded-lg`}
+            >
+              {alertMessage}
+            </div>
+          )
+          }
+        </div>
       </form>
     </Form>
 

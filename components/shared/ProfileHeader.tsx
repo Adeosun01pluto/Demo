@@ -65,7 +65,7 @@ function ProfileHeader({
     navigator.clipboard.writeText(currentURL);
   };
   return (
-    <div className='flex w-full flex-col justify-start'>
+    <div className='flex w-full flex-col justify-start dark:bg-light-2 p-2 md:p-3'>
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-3'>
           <div className='relative h-20 w-20 object-cover'>
@@ -78,7 +78,7 @@ function ProfileHeader({
           </div>
 
           <div className='flex-1'>
-            <h2 className='text-left text-heading3-bold text-light-1'>
+            <h2 className='text-left text-heading3-bold dark:text-dark-1 text-light-1'>
               {name}
             </h2>
             <p className='text-base-medium text-gray-1'>@{username}</p>
@@ -86,25 +86,24 @@ function ProfileHeader({
         </div>
         {accountId === authUserId && type !== "Community" && (
           <Link href='/profile/edit'>
-            <div className='flex cursor-pointer gap-3 rounded-lg bg-dark-3 px-4 py-2'>
+            <div className='flex cursor-pointer gap-3 rounded-lg dark:bg-light-1 bg-dark-3 px-4 py-2'>
               <Image
                 src='/assets/edit.svg'
                 alt='logout'
                 width={16}
                 height={16}
               />
-              <p className='text-light-2 max-sm:hidden'>Edit</p>
+              <p className='dark:text-dark-1 text-light-2 max-sm:hidden'>Edit</p>
             </div>
           </Link>
         )}
       </div>
-
-      <p className='my-2 max-w-lg text-base-regular text-light-2'>{bio}</p>
+      <p className='my-2 max-w-lg text-base-regular dark:text-dark-1  text-light-2'>{bio}</p>
       {/* <p className=' max-w-lg text-base-regular text-light-2'>Joined {createdAt}</p> */}
       <div className='w-full justify-between flex items-center'>
             <div className=' flex gap-2 items-center'>
-              <p className='text-xs text-white'>{followersArr.length} Followers</p>
-              <p className='text-xs text-white'>{followings.length} Followings</p>
+              <p className='text-xs dark:text-dark-1 text-light-1'>{followersArr.length} Followers</p>
+              <p className='text-xs dark:text-dark-1 text-light-1'>{followings.length} Followings</p>
             </div>
             <div className='flex gap-2 items-center'>
               <TooltipProvider>
@@ -131,7 +130,7 @@ function ProfileHeader({
               }
             </div>
       </div>
-      <div className='mt-12 h-0.5 w-full bg-dark-3' />
+      <div className='mt-6 h-0.5 w-full dark:bg-primary-500 bg-dark-3' />
     </div>
   );
 }

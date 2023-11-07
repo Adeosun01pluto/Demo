@@ -35,9 +35,10 @@ import { ThreeDots } from "react-loader-spinner";
 interface Props {
   userId: string;
   communityId:string | null
+  setShowModal: ()=>Boolean
 }
 
-function PostThread({ userId, communityId }: Props) {
+function PostThread({ userId, communityId, setShowModal }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const { startUpload } = useUploadThing("photos");
@@ -95,6 +96,7 @@ function PostThread({ userId, communityId }: Props) {
       form.reset({});
       setIsLoading(false)
       showAlert('success', 'Thread posted successfully!');
+      setShowModal(false)
       if(communityId){
         router.push(`/communities/${communityId}`);
       }else{
@@ -151,17 +153,12 @@ function PostThread({ userId, communityId }: Props) {
                   Content
                 </FormLabel>
                 <FormControl className='no-focus border border-dark-4 dark:border-none dark:text-dark-1 dark:bg-light-2  bg-dark-3 text-light-1'>
-                  <Textarea rows={15} {...field} />
+                  <Textarea placeholder="Write something ..." rows={15} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           /> 
-          {/* <UploadButton<OurFileRouter>
-            endpoint="media"
-            onClientUploadComplete={handleClientUploadComplete}
-            onUploadError={handleUploadError}
-          /> */}
           <FormField
             control={form.control}
             name='picture'
@@ -201,36 +198,36 @@ function PostThread({ userId, communityId }: Props) {
             )}
           />
           {isLoading? 
-          <Button type='submit' className={`w-full flex justify-center dark:bg-primary-500 dark:text-light-1 text-light-1 bg-primary-500`}>
-            <ThreeDots 
-              height="50" 
-              width="50" 
-              radius="9"
-              color="#fff" 
-              ariaLabel="three-dots-loading"
-              wrapperStyle={{}}
-              // wrapperClassName=""
-              visible={true}
-            />
-          </Button> :
-          <Button type='submit' className={`dark:bg-primary-500 dark:text-light-1 text-light-1 bg-primary-500 `}>
-            Post Thread
-          </Button>
-        }
+            <button type='submit' className={`w-full flex justify-center dark:bg-primary-500 dark:text-light-1 text-sm p-2 rounded-sm text-light-1 bg-primary-500`}>
+              <ThreeDots 
+                height="30" 
+                width="30" 
+                radius="9"
+                color="#fff" 
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                // wrapperClassName=""
+                visible={true}
+              />
+            </button> :
+            <button type='submit' className={`dark:bg-primary-500 dark:text-light-1 text-sm p-3 rounded-sm text-light-1 bg-primary-500 `}>
+              Post Thread
+            </button>
+          }
         </form>
+        <div className='absolute bottom-[50px] z-[9999] right-0 flex flex-col justify-start gap-5'>
+          {isAlertVisible && (
+            <div
+              className={`alert-${alertType} bg-opacity-50 bg-${
+                alertType === 'success' ? 'green' : 'red'
+              }-700 p-4 rounded-lg`}
+            >
+              {alertMessage}
+            </div>
+          )
+          }
+        </div>
       </Form>
-      <div className='absolute bottom-[50px] z-[9999] right-0 flex flex-col justify-start gap-5'>
-        {isAlertVisible && (
-          <div
-            className={`alert-${alertType} bg-opacity-50 bg-${
-              alertType === 'success' ? 'green' : 'red'
-            }-700 p-4 rounded-lg`}
-          >
-            {alertMessage}
-          </div>
-        )
-        }
-      </div>
     </div>
   );
 }

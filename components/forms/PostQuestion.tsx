@@ -31,9 +31,10 @@ import { ThreeDots } from "react-loader-spinner";
 interface Props {
   userId: string;
   communityId: string | null;
+  setShowModal: ()=>Boolean
 }
 
-function PostQuestion({ userId, communityId }: Props) {
+function PostQuestion({ userId, communityId, setShowModal }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const { startUpload } = useUploadThing("photos");
@@ -87,6 +88,7 @@ function PostQuestion({ userId, communityId }: Props) {
       form.reset({});
       setIsLoading(false)
       showAlert('success', 'Question posted successfully!');
+      setShowModal(false)
       if(communityId){
         router.push(`/communities/${communityId}`);
       }else{
@@ -135,7 +137,7 @@ function PostQuestion({ userId, communityId }: Props) {
                 Question
               </FormLabel>
               <FormControl className='no-focus border border-dark-4 dark:border-none dark:text-dark-1 dark:bg-light-2  bg-dark-3 text-light-1'>
-                <Textarea rows={15} {...field} />
+                <Textarea rows={15} placeholder="Ask anything ..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -182,10 +184,10 @@ function PostQuestion({ userId, communityId }: Props) {
 
 
         {isLoading? 
-          <Button type='submit' className={`w-full flex justify-center dark:bg-primary-500 dark:text-light-1 text-light-1 bg-primary-500 `}>
+          <button type='submit' className={`w-full flex justify-center dark:bg-primary-500 dark:text-light-1 text-sm p-2 rounded-sm text-light-1 bg-primary-500 `}>
             <ThreeDots 
-              height="50" 
-              width="50" 
+              height="30" 
+              width="30" 
               radius="9"
               color="#fff" 
               ariaLabel="three-dots-loading"
@@ -193,10 +195,10 @@ function PostQuestion({ userId, communityId }: Props) {
               // wrapperClassName=""
               visible={true}
             />
-          </Button> :
-          <Button type='submit' className={`dark:bg-primary-500 text-light-1 dark:text-light-1 bg-primary-500} `}>
+          </button> :
+          <button type='submit' className={`dark:bg-primary-500 text-light-1 dark:text-light-1 text-sm p-3 rounded-sm bg-primary-500} `}>
             Post Question
-          </Button>
+          </button>
         }
       </form>
     </Form>

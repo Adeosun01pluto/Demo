@@ -36,7 +36,7 @@ export default function Content({author,photos, isComment, content, id, comments
             <div className=" w-full">
               <ImageCard photos={photos} isComment={isComment} />
             </div>
-            <div className={`${isComment && ""} flex flex-col items-start gap-1`}>
+            <div className={`${isComment && ""} mt-1 flex flex-col items-start gap-1`}>
               <Action contentType={contentType} repost={repost} isComment={isComment} likes={likes} currentUser_Id={currentUser_Id} id={id}/>
               {isComment && comments.length > 0 && (
                 <Link href={`/${contentType}/${id}`}>

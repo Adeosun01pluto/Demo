@@ -26,20 +26,20 @@ function CreateCPost({currentUserId, communityId}: Props) {
   return (
     <div>
       <div>
-      <div className="animation-vibrate flex items-center sm:m-2 justify-center rounded-full absolute bottom-0 right-0 w-10 h-10 z-40 bg-white">
+      <div className="animation-vibrate flex items-center sm:m-2 justify-center rounded-full absolute bottom-0 right-0 w-10 h-10 z-40 dark:bg-primary-500 bg-light-1">
         {/* <!-- Button trigger modal --> */}
-        <Button 
+        <button 
             type="button"
             className="rounded-full "
             onClick={() => setShowModal(true)}
-        ><Plus color="blue" /></Button>        
+        ><Plus color="blue" /></button>        
       </div>
       {/* <!-- Modal --> */}
       <TEModal show={showModal} setShow={setShowModal}>
         <TEModalDialog>
           <TEModalContent>
             {/* <!--Modal body--> */}
-            <TEModalBody className="bg-black">
+            <TEModalBody className="dark:bg-light-2 bg-black">
               <button
                   type="button"
                   className="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
@@ -51,7 +51,7 @@ function CreateCPost({currentUserId, communityId}: Props) {
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
-                    stroke="white"
+                    stroke="blue"
                     className="h-6 w-6"
                   >
                     <path
@@ -64,16 +64,16 @@ function CreateCPost({currentUserId, communityId}: Props) {
                 <Tabs defaultValue="create thread" className="text-white w-[100%]">
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger onClick={()=>setActiveTab("create thread")}
-                            className={`mx-2 ${
-                            activeTab === 'create thread' ? 'bg-blue-400' : 'bg-gray-900'
+                            className={`${
+                            activeTab === 'create thread' ? 'bg-blue-400' : 'dark:text-dark-1 text-light-1 border-[1px] border-primary-500'
                             }`}
                             value="create thread"
                         >
                             Create Thread
                         </TabsTrigger>
                         <TabsTrigger onClick={()=>setActiveTab("create question")}
-                            className={`mx-2 ${
-                            activeTab === 'create question' ? 'bg-blue-400' : 'bg-gray-900'
+                            className={`${
+                            activeTab === 'create question' ? 'bg-blue-400' : 'dark:text-dark-1 text-light-1 border-[1px] border-primary-500'
                             }`}
                             value="create question"
                         >
@@ -82,11 +82,11 @@ function CreateCPost({currentUserId, communityId}: Props) {
                     </TabsList>
                     <TabsContent value="create thread">
                         {/* <h2 className="">Create Thread</h2> */}
-                        <PostThread communityId={communityId} userId={currentUserId} />
+                        <PostThread setShowModal={setShowModal} communityId={communityId} userId={currentUserId} />
                     </TabsContent>
                     <TabsContent value="create question">
                         {/* <h2 className="">Create Question</h2> */}
-                        <PostQuestion communityId={communityId} userId={currentUserId} />
+                        <PostQuestion setShowModal={setShowModal} communityId={communityId} userId={currentUserId} />
                     </TabsContent>
                 </Tabs>
             </TEModalBody>
