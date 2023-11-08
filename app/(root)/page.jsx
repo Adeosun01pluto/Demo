@@ -1,3 +1,4 @@
+// "use client"
 import ThreadCard from "@/components/cards/ThreadCard";
 import Searchbar from "@/components/shared/Searchbar";
 import { fetchPosts } from "@/lib/actions/thread.actions";
@@ -5,7 +6,7 @@ import { fetchPosts } from "@/lib/actions/thread.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { fetchUser } from "@/lib/actions/user.actions"
-
+// import Thread from "../../components/shared/Thread"
 
 async function Page({searchParams }) {
   
@@ -25,6 +26,7 @@ async function Page({searchParams }) {
      <>
       <h1 className="head-text">Home</h1>
       <Searchbar routeType="/" />
+      {/* <Thread result={result} user={user} userInfo={userInfo}/>  */}
       <section className="mt-3 md:mt-9 flex flex-col w-full gap-2 md:gap-10">
         {result.posts.length === 0 ? (
           <p>No threads found</p>
