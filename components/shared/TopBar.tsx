@@ -32,7 +32,7 @@ function TopBar() {
           width={28}
           height={28} 
         />
-        <p className="text-heading3-bold text-light-1 dark:text-dark-1 max-xs:hidden">Demo</p>
+        <p className="text-heading3-bold text-light-1 dark:text-dark-1 max-xs:hidden">Echominds</p>
       </Link>
 
       <div className="flex items-center gap-3">
