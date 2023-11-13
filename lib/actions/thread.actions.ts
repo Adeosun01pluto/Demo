@@ -13,25 +13,31 @@ export async function fetchPosts({
   userId,
   searchString = "",
   pageNumber = 1,
-  pageSize = 20,
-  sortBy = "desc",
+  pageSize = 40,
+  sortBy = "-_id",
+  searchParams
 }: {
   userId: string;
   searchString?: string;
   pageNumber?: number;
   pageSize?: number;
-  sortBy?: SortOrder;
+  sortBy?: string;
+  searchParams?: string;
 }) {
   connectToDB();
-
+  const next  = searchParams || null
   // Calculate the number of posts to skip based on the page number and page size.
   const skipAmount = (pageNumber - 1) * pageSize;
   // Create a case-insensitive regular expression for the provided search string.
   const regex = new RegExp(searchString, "i");
   // Create an initial query object to filter posts.
-  const query: FilterQuery<typeof Thread> = {
+  const query: FilterQuery<typeof Thread> = {   
     userId: userId, // Include only posts created by the current user.
-    parentId: { $in: [null, undefined] }
+    parentId: { $in: [null, undefined] },
+    _id: next 
+    ? sortBy === "_id" 
+      ? {$gt : next} : { $lt : next}
+    : { $exists : true}
   };
 
   // If the search query is not empty, add the $or operator to match either title or content fields.
@@ -45,9 +51,7 @@ export async function fetchPosts({
 
   // Create a query to fetch the posts that have no parent (top-level threads) (a thread that is not a comment/reply).
   const postsQuery = Thread.find(query)
-    .sort(sortOptions)
     .skip(skipAmount)
-    .limit(pageSize)
     .populate({
       path: "author",
       model: User,
@@ -68,7 +72,7 @@ export async function fetchPosts({
       path: "community",
       model: Community,
       select: "name profile id ", // Select the "name" field from the "Community" model
-    })
+    }).limit(pageSize).sort(sortBy)
 
   // Count the total number of top-level posts (threads) i.e., threads that are not comments.
   const totalPostsCount = await Thread.countDocuments({
@@ -76,10 +80,11 @@ export async function fetchPosts({
   }); // Get the total count of posts
 
   const posts = await postsQuery.exec();
-
+  const next_cursor = posts[posts.length - 1]?._id.toString() || undefined
+  console.log({next_cursor})
   const isNext = totalPostsCount > skipAmount + posts.length;
 
-  return { posts, isNext };
+  return { posts, isNext, next_cursor };
 }
 
 interface Params {

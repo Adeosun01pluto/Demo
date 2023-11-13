@@ -52,7 +52,7 @@ function QuestionCard({
   return (
     <article
       className={`flex w-full flex-col rounded-xl ${
-        isComment ? "px-0 xs:px-3 py-3 my-2 dark:bg-light-2" : "dark:bg-light-2 bg-dark-2 p-5"
+        isComment ? "px-0 xs:px-3 py-3 my-1 md:my-2 bg-dark-2 dark:bg-light-2" : "dark:bg-light-2 bg-dark-2 p-3"
       }`}
     >
       <div className='flex items-start justify-between'>
@@ -98,7 +98,7 @@ function QuestionCard({
 
           <Link href={`/questions/${id}`}>
             <p className='mt-1 text-subtle-medium text-gray-1'>
-              {comments.length} answer{comments.length > 1 ? "" : "s"}
+              {comments.length} repl{comments.length > 1 ? "ies" : "y"}
             </p>
           </Link>
         </div>

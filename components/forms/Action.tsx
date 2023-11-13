@@ -64,15 +64,18 @@ function Action({contentType, id, currentUser_Id, likes, isComment, repost }:Pro
           {isComment? null :
           <span className="dark:text-gray-700 text-gray-1">{likesArr?.length}</span>
           }
-          <Link href={`/${contentType}/${id}`}>
-            <Image
-              src='/assets/reply.svg'
-              alt='heart'
-              width={24}
-              height={24}
-              className='cursor-pointer object-contain'
-            />
-          </Link>
+          {
+            isComment ? null : 
+            <Link href={`/${contentType}/${id}`}>
+              <Image
+                src='/assets/reply.svg'
+                alt='heart'
+                width={24}
+                height={24}
+                className='cursor-pointer object-contain'
+                />
+            </Link>
+          }
           {
             isComment? null : repostArr?.includes(currentUser_Id) ? 
             <Image

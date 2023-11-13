@@ -21,7 +21,7 @@ const LeftSidebar = () => {
     {
       imgURL: theme === "dark" ? "/assets/question_icon.svg" : "/assets/question-square.svg",
       route: "/questions",
-      label: "Questions",
+      label: "Anonymous",
     },
     {
       imgURL: theme === "dark" ? "/assets/create_icon.svg" : "/assets/create.svg",

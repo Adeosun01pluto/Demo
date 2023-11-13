@@ -38,13 +38,13 @@ export const sidebarLinks = [
   
   export const profileTabs = [
     { value: "threads", label: "Threads", icon: "/assets/reply.svg" },
-    { value: "questions", label: "Questions", icon: "/assets/question.svg" },
+    { value: "anonymous", label: "Anonymous", icon: "/assets/question.svg" },
     { value: "tagged", label: "Tagged", icon: "/assets/tag.svg" },
   ];
   
   export const communityTabs = [
     { value: "threads", label: "Threads", icon: "/assets/reply.svg" },
-    { value: "questions", label: "Questions", icon: "/assets/reply.svg" },
+    { value: "anonymous", label: "Anonymous", icon: "/assets/reply.svg" },
     // { value: "members", label: "Members", icon: "/assets/members.svg" },
     // { value: "about", label: "About", icon: "/assets/request.svg" },
   ];

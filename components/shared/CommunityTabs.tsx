@@ -56,7 +56,7 @@ async function CommunityTabs({ currentUserId,type, communityId, accountType,curr
   let members: Members;
   if (type === "Threads") {
     result = await fetchCommunityPosts(communityId);
-  } else if (type === "Questions"){
+  } else if (type === "Anonymous"){
     question = await fetchCommunityQuestions(communityId);
   } else if (type === "Members"){
     members = await fetchCommunityMembers(communityId);
@@ -85,11 +85,11 @@ async function CommunityTabs({ currentUserId,type, communityId, accountType,curr
             />  
           ))
         ))
-        : type === "Questions" ?
-        (question.length === 0 ? (
+        : type === "Anonymous" ?
+        (question?.length === 0 ? (
           <p>No questions found.</p>
         ) : (
-          question.map((question) => (
+          question?.map((question) => (
             <QuestionCard 
               key={question._id}
               id={question._id}

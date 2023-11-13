@@ -24,7 +24,7 @@ function TabsComponent({_id}: {_id :string}) {
                     }`}
                     value="create question"
                 >
-                    Create Question
+                    Anonymous
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="create thread">

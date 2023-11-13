@@ -21,7 +21,7 @@ async function page({ params }: { params: { id: string } }) {
     <main className="relative">
       {/* Create Float */}
       <div className="fixed z-40 right-2 sm:right-4 xl:right-[290px] bottom-[70px] sm:bottom-[100px] md:bottom-4 ">
-        <CreateCPost communityId={params.id} currentUserId={userInfo._id} />
+        <CreateCPost communityId={params.id} communityName={result.name} currentUserId={userInfo._id} />
       </div>
 
       {/* Header */}
@@ -110,7 +110,7 @@ async function page({ params }: { params: { id: string } }) {
                     {result.threads.length}
                   </p>
                 )}
-                {tab.label === "Questions" && (
+                {tab.label === "Anonymous" && (
                   <p className='ml-1 rounded-sm dark:bg-primary-500 bg-light-4 px-2 py-1 !text-tiny-medium text-light-2'>
                     {result.questions?.length}
                   </p>

@@ -86,7 +86,7 @@ function PostQuestion({ userId, communityId }: Props) {
       // Reset the form fields to empty values
       form.reset({});
       setIsLoading(false)
-      showAlert('success', 'Question posted successfully!');
+      showAlert('success', 'Anonymous posted successfully!');
       if(communityId){
         router.push(`/communities/${communityId}`);
       }else{
@@ -95,7 +95,7 @@ function PostQuestion({ userId, communityId }: Props) {
       
     } catch (error) {
       setIsLoading(false)
-      showAlert('Error', 'Failed to Post Question !');
+      showAlert('Error', 'Failed to Post Anonymous !');
       console.log(error)
     }
   };
@@ -132,10 +132,10 @@ function PostQuestion({ userId, communityId }: Props) {
           render={({ field }) => (
             <FormItem className='flex w-full flex-col gap-3'>
               <FormLabel className='text-base-semibold  dark:text-dark-2 text-lg text-light-2'>
-                Question
+                Anonymous
               </FormLabel>
               <FormControl className='no-focus border border-dark-4 dark:border-none dark:text-dark-1 dark:bg-light-2  bg-dark-3 text-light-1'>
-                <Textarea rows={15} placeholder="Ask anything ..." {...field} />
+                <Textarea rows={15} placeholder="Write Anonymous ..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

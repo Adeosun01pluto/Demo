@@ -6,7 +6,7 @@ import { fetchPosts } from "@/lib/actions/thread.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { fetchUser } from "@/lib/actions/user.actions"
-// import Thread from "../../components/shared/Thread"
+import Thread from "../../components/shared/Thread"
 
 async function Page({searchParams }) {
   
@@ -19,15 +19,16 @@ async function Page({searchParams }) {
     userId: userInfo?._id,
     searchString: search,
     pageNumber: 1,
-    pageSize: 25
+    // pageSize: 3,
+    // searchParams: "65515a5a16b5ecbb4652177c"
   });
   if (!user) redirect("/sign-in")
   return (
      <>
       <h1 className="head-text">Home</h1>
       <Searchbar routeType="/" />
-      {/* <Thread result={result} user={user} userInfo={userInfo}/>  */}
-      <section className="mt-3 md:mt-9 flex flex-col w-full gap-2 md:gap-10">
+      <Thread posts={result.posts} next_cursor={result.next_cursor} user={user} userInfo={userInfo}/> 
+      {/* <section className="mt-3 md:mt-9 flex flex-col w-full gap-2 md:gap-10">
         {result.posts.length === 0 ? (
           <p>No threads found</p>
         ) : (
@@ -52,7 +53,7 @@ async function Page({searchParams }) {
           </>
         )
         }
-      </section>
+      </section> */}
     </>
   )
 }

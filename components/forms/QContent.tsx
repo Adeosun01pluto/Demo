@@ -27,21 +27,22 @@ export default function QContent({author,photos, isComment, content, id, comment
     <div>
         <div className='flex flex-col'>
         {isComment? 
-            <div className="flex gap-2 items-center mb-2">
-              <Link href={`/profile/${author.id}`} className='relative h-8 w-8'>
-                <Image
-                  src={`${author.image}`}
-                  alt='user_community_image'
-                  fill
-                  className='cursor-pointer object-cover rounded-full'
-                />
-              </Link>
-              <p className=" dark:text-dark-2 text-light-2">{author.name}</p>
-            </div>
+            // <div className="flex gap-2 items-center mb-2">
+            //   <Link href={`/profile/${author.id}`} className='relative h-8 w-8'>
+            //     <Image
+            //       src={`${author.image}`}
+            //       alt='user_community_image'
+            //       fill
+            //       className='cursor-pointer object-cover rounded-full'
+            //     />
+            //   </Link>
+            //   <p className=" dark:text-dark-2 text-light-2">{author.name}</p>
+            // </div>
+            null
             :null
           }
             
-            <p className={` ${isComment? "text-md" : "text-md md:text-lg font-bold"} dark:text-dark-2 text-light-2`}>{content}</p>
+            <p className={` ${isComment? "text-md" : "text-md md:text-lg font-bold"} px-2 dark:text-dark-2 text-light-2`}>{content}</p>
             {photos?.length > 0 ?
             <div className=" w-full">
               <ImageCard photos={photos} isComment={isComment} />

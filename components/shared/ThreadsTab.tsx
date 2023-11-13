@@ -66,14 +66,14 @@ interface Question {
 async function ThreadsTab({ currentUserId,currentUser_Id, accountId, accountType, type }: Props) {
   let result: Result | null = null;
   let questions: Question[] = [];
-  if (type === "Questions") {
+  if (type === "Anonymous") {
     questions = await fetchUserQuestions(currentUser_Id);
   } else if (type= "Threads") {
     result = await fetchUserPosts(accountId);
   }
   // console.log(questions)
   return (
-    <section className='mt-9 flex flex-col gap-10'>
+    <section className='mt-9 flex flex-col gap-3'>
       {
         type === "Threads" ? 
         result?.length > 0 ?
@@ -100,7 +100,7 @@ async function ThreadsTab({ currentUserId,currentUser_Id, accountId, accountType
         />
       ))) : 
       <p className="text-lg font-light ">No Threads</p> 
-      : type === "Questions" ? 
+      : type === "Anonymous" ? 
       questions?.length > 0 ?
       (questions?.map((question :any)=>(
         <QuestionCard 

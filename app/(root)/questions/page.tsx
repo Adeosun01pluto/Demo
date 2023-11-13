@@ -27,7 +27,7 @@ async function Page({ searchParams } :{ searchParams: SearchParams }) {
   if (!user) redirect("/sign-in")
   return (
      <>
-      <h1 className="head-text">Questions</h1>
+      <h1 className="head-text">Anonymous</h1>
       <Searchbar routeType="questions" />
       <section className="text-white mt-3 md:mt-9 flex flex-col gap-2 md:gap-10">
       {result.questions.length === 0 ? (
