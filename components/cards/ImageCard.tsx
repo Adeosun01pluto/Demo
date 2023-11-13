@@ -156,8 +156,8 @@ function ImageCard({ photos, isComment }: Props) {
           <div className="image-container">
             <img src={selectedImage} alt="Full Screen" />
           </div>
-          <button className="close-button" onClick={closeImageViewer}>
-            Close
+          <button className="close-button text-2xl p-5" onClick={closeImageViewer}>
+            X
           </button>
       </div>
       )}

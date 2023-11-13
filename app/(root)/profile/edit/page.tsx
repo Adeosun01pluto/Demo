@@ -25,7 +25,7 @@ async function Page() {
   return (
     <div className="">
       
-      <section className='mt-12 bg-light-2'>
+      <section className='mt-12 bg-dark-2 dark:bg-light-2'>
         <div className="md:w-[75%] mx-auto justify-start py-1">
           <h1 className='head-text'>Edit Profile</h1>
           <p className='mt-3 text-base-regular dark:text-dark-1 text-light-2'>Make any changes</p>

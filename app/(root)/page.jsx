@@ -1,4 +1,3 @@
-// "use client"
 import ThreadCard from "@/components/cards/ThreadCard";
 import Searchbar from "@/components/shared/Searchbar";
 import { fetchPosts } from "@/lib/actions/thread.actions";

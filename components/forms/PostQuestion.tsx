@@ -195,7 +195,7 @@ function PostQuestion({ userId, communityId }: Props) {
             />
           </button> :
           <button type='submit' className={`dark:bg-primary-500 text-light-1 dark:text-light-1 text-sm p-3 rounded-sm bg-primary-500} `}>
-            Post Question
+            Post Anonymous
           </button>
         }
       </form>

@@ -118,7 +118,7 @@ async function ThreadsTab({ currentUserId,currentUser_Id, accountId, accountType
           comments={question.children}
           photos={question.photos}    
         />
-      ))) : <p className="text-lg font-light ">No Questions</p>
+      ))) : <p className="text-lg font-light ">No Anonymous</p>
       : type === "Followers" ? "" : "" 
 
     }

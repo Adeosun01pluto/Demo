@@ -26,10 +26,12 @@ async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <h1 className='head-text'>Edit Community</h1>
-      <p className='mt-3 text-base-regular text-light-2'>Make any changes</p>
 
-      <section className='mt-12'>
+      <section className='bg-dark-2 dark:bg-light-2 mt-12'>
+        <div className="px-8 py-2">
+          <h1 className='head-text'>Edit Community</h1>
+          <p className='mt-3 text-base-regular dark:text-dark-1 text-light-2'>Make any changes</p>
+        </div>
         <CommunityProfile community={communityData} paramsId={params.id} btnTitle='Save' />
       </section>
     </>
