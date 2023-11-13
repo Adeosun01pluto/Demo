@@ -85,7 +85,7 @@ function Action({contentType, id, currentUser_Id, likes, isComment, repost }:Pro
             /> : 
             <Image
             onClick={repostThreadHandle}
-            src='/assets/retweet-svgrepo.svg'
+            src='/assets/retweet_btn.svg'
             alt='heart'
             width={20}
             height={20}
@@ -102,13 +102,13 @@ function Action({contentType, id, currentUser_Id, likes, isComment, repost }:Pro
                   height={24}
                   className='cursor-pointer object-contain'
                 /> */}
-                <Image
+                {/* <Image
                   src='/assets/share.svg'
                   alt='heart'
                   width={24}
                   height={24}
                   className='cursor-pointer object-contain'
-                />
+                /> */}
             </div>
     </div>
   )

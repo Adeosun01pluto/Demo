@@ -7,8 +7,8 @@ import "tw-elements-react/dist/css/tw-elements-react.min.css";
 import { ClerkProvider } from "@clerk/nextjs"
 
 export const metadata: Metadata = {
-  title: 'Threads',
-  description: 'A Next.js 13 Meta Threads Application',
+  title: 'Echominds',
+  description: 'Echominds is where scholars share ideas',
 }
 import Providers from "./Providers";
 import ThemeSwitcher from "./ThemeSwitcher";

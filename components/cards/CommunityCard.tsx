@@ -15,6 +15,11 @@ interface Props {
 }
 
 function CommunityCard({ id, name, username, imgUrl, description, members }: Props) {
+  const maxLength = 185;
+  // Check if the description is longer than the maximum length
+  const truncatedDescription = description.length > maxLength
+  ? `${description.slice(0, maxLength)}...`
+  : description;
   return (
     <article className='community-card'>
       <div className='flex flex-wrap items-center gap-3'>
@@ -42,8 +47,9 @@ function CommunityCard({ id, name, username, imgUrl, description, members }: Pro
           <p className='text-small-medium text-gray-1'>@{username}</p>
         </div>
       </div>
-
-      <p className='mt-4 text-subtle-medium text-gray-1'>{description}</p>
+      <div className="flex-1">
+        <p className='mt-4 text-subtle-medium text-gray-1'>{truncatedDescription}</p>
+      </div>
 
       <div className='mt-5 flex flex-wrap items-center justify-between gap-3'>
         <Link href={`/communities/${id}`}>

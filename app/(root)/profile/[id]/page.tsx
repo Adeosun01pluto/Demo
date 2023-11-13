@@ -47,12 +47,12 @@ async function Page({ params }: { params: { id: string } }) {
 
                 {tab.label === "Threads" && (
                   <p className='rounded-sm dark:bg-primary-500 bg-light-4 px-2 py-1 !text-tiny-medium text-light-2'>
-                    {userInfo.threads.length}
+                    {userInfo.threads.length + userInfo.repost.length}
                   </p>
                 )}
                 {tab.label === "Questions" && (
                   <p className='rounded-sm dark:bg-primary-500 bg-light-4 px-2 py-1 !text-tiny-medium text-light-2'>
-                    {userInfo.questions?.length}
+                    {userInfo.questions?.length + userInfo.repostQuestion?.length}
                   </p>
                 )}
               </TabsTrigger>

@@ -375,11 +375,13 @@ export async function repostThread(threadId: string, userId: string): Promise<st
     if (thread.repost.includes(userId)) {
       // User has already repost the thread, so remove the like
       thread.repost.pull(userId);
+      user.repost.pull(threadId);
     } else {
       thread.repost.push(userId);
+      user.repost.push(threadId);
     }
-
     await thread.save();
+    await user.save();
     
     return thread.repost; // Return the updated list of likes for the question
   } catch (error : any ) {

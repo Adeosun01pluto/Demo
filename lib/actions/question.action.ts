@@ -377,11 +377,14 @@ async function fetchAllChildQuestions(threadId: string): Promise<any[]> {
       if (question.repost.includes(userId)) {
         // User has already repost the question, so remove the like
         question.repost.pull(userId);
+        user.repostQuestion.pull(questionId);
       } else {
         question.repost.push(userId);
+        user.repostQuestion.push(questionId);
       }
   
       await question.save();
+      await user.save();
       
       return question.repost; // Return the updated list of likes for the question
     } catch (error : any ) {

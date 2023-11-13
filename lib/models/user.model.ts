@@ -49,6 +49,18 @@ const userSchema = new mongoose.Schema({
       ref: "Community",
     },
   ],
+  repost: [
+    {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    }
+  ],
+  repostQuestion: [
+    {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    }
+  ],
   // activities: [
   //   {
   //     _id: {

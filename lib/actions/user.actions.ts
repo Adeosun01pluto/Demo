@@ -67,16 +67,17 @@ export async function updateUser({
 export async function fetchUserPosts(userId: string) {
   try {
     connectToDB();
-
+    // const user = await User.findOne({ id: userId })
     // Find all threads authored by the user with the given userId
-    const threads = await User.findOne({ id: userId }).populate({
+    const user = await User.findOne({ id: userId })
+    .populate({
       path: "threads",
       model: Thread,
       populate: [
         {
           path: "community",
           model: Community,
-          select: "name id image _id", // Select the "name" and "_id" fields from the "Community" model
+          select: "name id image _id",
         },
         {
           path: "children",
@@ -87,9 +88,47 @@ export async function fetchUserPosts(userId: string) {
             select: "name image id", // Select the "name" and "_id" fields from the "User" model
           },
         },
+        {
+          path: "author", // Add this population block for the "author" field
+          model: User,
+          select: "name image id",
+        },
       ],
+    })
+    .populate({
+      path: "repost",
+      model: Thread,
+      populate: [
+        {
+          path: "community",
+          model: Community,
+          select: "name id image _id",
+        },
+        {
+          path: "children",
+          model: Thread,
+          populate: {
+            path: "author",
+            model: User,
+            select: "name image id", // Select the "name" and "_id" fields from the "User" model
+          },
+        },
+        {
+          path: "author", // Add this population block for the "author" field
+          model: User,
+          select: "name image id",
+        },
+      ],
+    });      
+    const allThreads = [...user.threads, ...user.repost];
+
+    // Sort the array based on the createdAt property in descending order
+    const sortedThreads = allThreads.sort((a, b) => {
+      // @ts-ignore
+      return new Date(b.createdAt) - new Date(a.createdAt);
     });
-    return threads;
+    // const result =[...user.threads, ...user.repost]
+    return sortedThreads;
   } catch (error) {
     console.error("Error fetching user threads:", error);
     throw error;
@@ -100,24 +139,66 @@ export async function fetchUserQuestions(userId: string) {
   try {
     connectToDB();  
     // Find all threads authored by the user with the given userId
-    const question = await Question.find({ author: userId }).populate({
-      path: "author",
-      model: User,
+    const user = await User.find({ _id: userId })
+    .populate({
+      path: "questions",
+      model: Question,
+      populate: [
+        {
+          path: "community",
+          model: Community,
+          select: "name id image _id",
+        },
+        {
+          path: "children",
+          model: Question,
+          populate: {
+            path: "author",
+            model: User,
+            select: "name image id", // Select the "name" and "_id" fields from the "User" model
+          },
+        },
+        {
+          path: "author", // Add this population block for the "author" field
+          model: User,
+          select: "name image id",
+        },
+      ],
     })
     .populate({
-      path: "community",
-      model: Community,
-    })
-    .populate({
-      path: "children", // Populate the children field
-      populate: {
-        path: "author", // Populate the author field within children
-        model: User,
-        select: "_id name parentId image", // Select only _id and username fields of the author
-      },
+      path: "repostQuestion",
+      model: Question,
+      populate: [
+        {
+          path: "community",
+          model: Community,
+          select: "name id image _id",
+        },
+        {
+          path: "children",
+          model: Question,
+          populate: {
+            path: "author",
+            model: User,
+            select: "name image id", // Select the "name" and "_id" fields from the "User" model
+          },
+        },
+        {
+          path: "author", // Add this population block for the "author" field
+          model: User,
+          select: "name image id",
+        },
+      ],
     });
 
-    return question;
+    const allQuestions =[...user[0].questions, ...user[0].repostQuestion]
+    // Sort the array based on the createdAt property in descending order
+    const sortedQuestions = allQuestions.sort((a, b) => {
+      // @ts-ignore
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+    // console.log(result)
+    return sortedQuestions;
   } catch (error) {
     console.error("Error fetching user threads:", error);
     throw error;

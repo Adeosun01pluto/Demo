@@ -35,10 +35,9 @@ import { ThreeDots } from "react-loader-spinner";
 interface Props {
   userId: string;
   communityId:string | null
-  setShowModal: ()=>Boolean
 }
 
-function PostThread({ userId, communityId, setShowModal }: Props) {
+function PostThread({ userId, communityId}: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const { startUpload } = useUploadThing("photos");
@@ -96,7 +95,6 @@ function PostThread({ userId, communityId, setShowModal }: Props) {
       form.reset({});
       setIsLoading(false)
       showAlert('success', 'Thread posted successfully!');
-      setShowModal(false)
       if(communityId){
         router.push(`/communities/${communityId}`);
       }else{

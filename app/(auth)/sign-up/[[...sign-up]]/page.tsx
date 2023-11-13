@@ -3,7 +3,9 @@ import { SignUp } from "@clerk/nextjs";
 import { Cloud } from "lucide-react";
  
 export default function Page() {
-  return <SignUp />;
+  return <div className="w-full flex items-center py-6 justify-center min-h-screen">
+    <SignUp />
+  </div>
 }
 
 

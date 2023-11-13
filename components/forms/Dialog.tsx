@@ -121,7 +121,7 @@ function Dialog({currentUserId}: Props) {
         <div>
       {/* <!-- Button trigger modal --> */}
       <button 
-        className=" dark:bg-[#ab3045] bg-[#ab3045] inline-block rounded px-6 pb-2 pt-2.5 text-md font-medium dark:text-white text-white"
+        className=" dark:bg-primary-500 bg-primary-500 inline-block rounded px-6 pb-2 pt-2.5 text-md font-medium dark:text-white text-white"
         onClick={() => setShowModal(true)}
       >Create Community</button>
 
@@ -277,7 +277,7 @@ function Dialog({currentUserId}: Props) {
                 <div className='absolute bottom-[50px] z-[9999] right-0 flex flex-col justify-start gap-5'>
                   {isAlertVisible && (
                     <div
-                      className={`alert-${alertType} bg-opacity-50 bg-${
+                      className={`alert-${alertType} text-white bg-opacity-50 bg-${
                         alertType === 'success' ? 'green' : 'red'
                       }-700 p-4 rounded-lg`}
                     >

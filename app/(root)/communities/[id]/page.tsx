@@ -125,7 +125,7 @@ async function page({ params }: { params: { id: string } }) {
               className='w-full text-light-1'
             >
               {/* @ts-ignore */}
-              {tab.label}
+              {/* {tab.label} */}
               <CommunityTabs
                 currentUserId={user.id}
                 currentUser_Id={userInfo._id}

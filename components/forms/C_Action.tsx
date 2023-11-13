@@ -38,7 +38,7 @@ export default function C_Action({adminId, currentUserId, communityId, members, 
         <div className="flex gap-2 items-center">
               <Share color='white' />
               {/* <Share onClick={handleShareClick} color='white' /> */}
-              {adminId === currentUserId ? null : 
+              {/* {adminId === currentUserId ? null : 
                   (
                   !members.includes(currentUserObjectId) ? 
                   // <Button onClick={join} className='rounded-full bg-primary-500'>Join</Button>
@@ -47,7 +47,7 @@ export default function C_Action({adminId, currentUserId, communityId, members, 
                   // <Button onClick={leave} className='rounded-full border-[1px] border-primary-500'>Leave</Button>
                   <Button className='rounded-full border-[1px] border-primary-500'>Leave</Button>
                 )
-              }
+              } */}
         </div>
     </div>
   )

@@ -26,7 +26,7 @@ export default function Providers({ children }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class">{children}</ThemeProvider>;
+      <ThemeProvider attribute="class">{children}</ThemeProvider>
     </QueryClientProvider>
   ) 
 }
