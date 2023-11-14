@@ -5,6 +5,7 @@ import { fetchUser } from "@/lib/actions/user.actions";
 // import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import Question from "../../../components/shared/Question"
 
 interface SearchParams {
   q: string;
@@ -29,7 +30,8 @@ async function Page({ searchParams } :{ searchParams: SearchParams }) {
      <>
       <h1 className="head-text">Anonymous</h1>
       <Searchbar routeType="questions" />
-      <section className="text-white mt-3 md:mt-9 flex flex-col gap-2 md:gap-10">
+      <Question  search={search} currentUserId={user.id} currentUser_Id={userInfo._id}/>
+      {/* <section className="text-white mt-3 md:mt-9 flex flex-col gap-2 md:gap-10">
       {result.questions.length === 0 ? (
           <p className="">No questions found</p>
         ) : (
@@ -56,7 +58,7 @@ async function Page({ searchParams } :{ searchParams: SearchParams }) {
           </>
         )
         }
-      </section>
+      </section> */}
     </>
   )
 }

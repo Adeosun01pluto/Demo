@@ -1,10 +1,8 @@
 "use client"
 import { likeQuestion, repostQuestion } from "@/lib/actions/question.action";
 import { likeThread, repostThread } from "@/lib/actions/thread.actions";
-import { currentUser } from "@clerk/nextjs";
 import Image from "next/image"
 import Link from "next/link"
-import { redirect } from "next/navigation";
 import { useState } from "react";
 
 interface Props{

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-import { profileTabs } from "@/constants";
+import { AuthprofileTabs, profileTabs } from "@/constants";
 
 import ThreadsTab from "@/components/shared/ThreadsTab";
 import ProfileHeader from "@/components/shared/ProfileHeader";
@@ -33,6 +33,32 @@ async function Page({ params }: { params: { id: string } }) {
       />
       <div className='mt-9'>
         <Tabs defaultValue='threads' className='w-full'>
+          {currentUserLogged._id.equals(userInfo._id) ?
+            <TabsList className='tab'>
+            {AuthprofileTabs.map((tab) => (
+              <TabsTrigger key={tab.label} value={tab.value} className='tab'>
+                <Image
+                  src={tab.icon}
+                  alt={tab.label}
+                  width={24}
+                  height={24}
+                  className='object-contain'
+                />
+                <p className='max-sm:hidden'>{tab.label}</p>
+
+                {tab.label === "Threads" && (
+                  <p className='rounded-sm dark:bg-primary-500 bg-light-4 px-2 py-1 !text-tiny-medium text-light-2'>
+                    {userInfo.threads.length + userInfo.repost.length}
+                  </p>
+                )}
+                {tab.label === "Anonymous" && (
+                  <p className='rounded-sm dark:bg-primary-500 bg-light-4 px-2 py-1 !text-tiny-medium text-light-2'>
+                    {userInfo.questions?.length + userInfo.repostQuestion?.length}
+                  </p>
+                )}
+              </TabsTrigger>
+            ))}
+          </TabsList> :
           <TabsList className='tab'>
             {profileTabs.map((tab) => (
               <TabsTrigger key={tab.label} value={tab.value} className='tab'>
@@ -58,6 +84,7 @@ async function Page({ params }: { params: { id: string } }) {
               </TabsTrigger>
             ))}
           </TabsList>
+          }
           {profileTabs.map((tab) => (
             <TabsContent
               key={`content-${tab.label}`}

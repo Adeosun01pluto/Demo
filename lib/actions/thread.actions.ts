@@ -9,11 +9,21 @@ import Thread from "../models/thread.model";
 import Community from "../models/community.model";
 import { FilterQuery, SortOrder } from "mongoose";
 
+export async function fetchPosts_({after, search}:any) {
+  connectToDB();
+  const regexEx = new RegExp(search, "i");
+    // Create a query to fetch the posts that have no parent (top-level threads) (a thread that is not a comment/reply).
+  const postsQuery = Thread.find({ })
+    .skip(after)
+    .limit(1);
+
+  return postsQuery;
+}
 export async function fetchPosts({
   userId,
   searchString = "",
   pageNumber = 1,
-  pageSize = 40,
+  pageSize = 4,
   sortBy = "-_id",
   searchParams
 }: {
@@ -34,10 +44,6 @@ export async function fetchPosts({
   const query: FilterQuery<typeof Thread> = {   
     userId: userId, // Include only posts created by the current user.
     parentId: { $in: [null, undefined] },
-    _id: next 
-    ? sortBy === "_id" 
-      ? {$gt : next} : { $lt : next}
-    : { $exists : true}
   };
 
   // If the search query is not empty, add the $or operator to match either title or content fields.
@@ -48,43 +54,39 @@ export async function fetchPosts({
   }
   // Define the sort options for the fetched posts based on createdAt field and provided sort order.
   const sortOptions = { createdAt: sortBy };
-
   // Create a query to fetch the posts that have no parent (top-level threads) (a thread that is not a comment/reply).
   const postsQuery = Thread.find(query)
-    .skip(skipAmount)
-    .populate({
-      path: "author",
-      model: User,
-    })
-    .populate({
-      path: "community",
-      model: Community,
-    })
-    .populate({
-      path: "children", // Populate the children field
-      populate: {
-        path: "author", // Populate the author field within children
-        model: User,
-        select: "_id name parentId image", // Select only _id and username fields of the author
-      },
-    })
-    .populate({
-      path: "community",
-      model: Community,
-      select: "name profile id ", // Select the "name" field from the "Community" model
-    }).limit(pageSize).sort(sortBy)
+    .skip(skipAmount).limit(pageSize).sort(sortBy)
+    // Count the total number of top-level posts (threads) i.e., threads that are not comments.
+    const totalPostsCount = await Thread.countDocuments({
+      parentId: { $in: [null, undefined] },
+    }); // Get the total count of posts
+    
+    const posts = await postsQuery.exec();
+    const next_cursor = posts[posts.length - 1]?._id.toString() || undefined
+    // Manually populate the fields
+    const populatedPosts = await Promise.all(posts.map(async (post) => {
+      const author = await User.findById(post.author);
+      const community = await Community.findById(post.community);
+      const children = await Promise.all(post.children.map(async (childId : any) => {
+        const child = await Thread.findById(childId);
+        const childAuthor = await User.findById(child.author);
+        return {
+          ...child.toObject(),
+          author: childAuthor ? { _id: childAuthor._id, name: childAuthor.name, image: childAuthor.image } : null,
+        };
+      }));
 
-  // Count the total number of top-level posts (threads) i.e., threads that are not comments.
-  const totalPostsCount = await Thread.countDocuments({
-    parentId: { $in: [null, undefined] },
-  }); // Get the total count of posts
+      return {
+        ...post.toObject(),
+        author: author ? { _id: author._id, name: author.name, image: author.image } : null,
+        community: community ? { name: community.name, profile: community.profile, id: community.id } : null,
+        children,
+      };
+    }));
+    const isNext = totalPostsCount > skipAmount + posts.length;
 
-  const posts = await postsQuery.exec();
-  const next_cursor = posts[posts.length - 1]?._id.toString() || undefined
-  console.log({next_cursor})
-  const isNext = totalPostsCount > skipAmount + posts.length;
-
-  return { posts, isNext, next_cursor };
+  return { posts :populatedPosts , isNext, next_cursor };
 }
 
 interface Params {

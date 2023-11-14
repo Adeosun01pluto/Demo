@@ -16,7 +16,7 @@ export async function fetchQuestions({
   userId,
   searchString = "",
   pageNumber = 1,
-  pageSize = 20,
+  pageSize = 5,
   sortBy = "desc",
 }: {
   userId: string;
@@ -51,22 +51,22 @@ export async function fetchQuestions({
     .sort(sortOptions)
     .skip(skipAmount)
     .limit(pageSize)
-    .populate({
-      path: "author",
-      model: User,
-    })
-    .populate({
-      path: "community",
-      model: Community,
-    })
-    .populate({
-      path: "children", // Populate the children field
-      populate: {
-        path: "author", // Populate the author field within children
-        model: User,
-        select: "_id name parentId image", // Select only _id and username fields of the author
-      },
-    });
+    // .populate({
+    //   path: "author",
+    //   model: User,
+    // })
+    // .populate({
+    //   path: "community",
+    //   model: Community,
+    // })
+    // .populate({
+    //   path: "children", // Populate the children field
+    //   populate: {
+    //     path: "author", // Populate the author field within children
+    //     model: User,
+    //     select: "_id name parentId image", // Select only _id and username fields of the author
+    //   },
+    // });
 
   // Count the total number of top-level posts (threads) i.e., threads that are not comments.
   const totalPostsCount = await Question.countDocuments({
@@ -74,10 +74,18 @@ export async function fetchQuestions({
   }); // Get the total count of posts
 
   const questions = await questionsQuery.exec();
-
+  
+  // Manually populate the community field for each question
+  const populatedQuestions = await Promise.all(questions.map(async (question) => {
+    const community = await Community.findById(question.community);
+    return {
+      ...question.toObject(),
+      community: community ? { name: community.name, profile: community.profile, id: community.id } : null,
+    };
+  }));
   const isNext = totalPostsCount > skipAmount + questions.length;
 
-  return { questions, isNext };
+  return { questions:populatedQuestions, isNext };
 }
   
   interface Params {

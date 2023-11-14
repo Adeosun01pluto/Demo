@@ -38,6 +38,11 @@ export const sidebarLinks = [
   
   export const profileTabs = [
     { value: "threads", label: "Threads", icon: "/assets/reply.svg" },
+    // { value: "anonymous", label: "Anonymous", icon: "/assets/question.svg" },
+    { value: "tagged", label: "Tagged", icon: "/assets/tag.svg" },
+  ];
+  export const AuthprofileTabs = [
+    { value: "threads", label: "Threads", icon: "/assets/reply.svg" },
     { value: "anonymous", label: "Anonymous", icon: "/assets/question.svg" },
     { value: "tagged", label: "Tagged", icon: "/assets/tag.svg" },
   ];

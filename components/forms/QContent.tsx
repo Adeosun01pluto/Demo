@@ -43,6 +43,7 @@ export default function QContent({author,photos, isComment, content, id, comment
           }
             
             <p className={` ${isComment? "text-md" : "text-md md:text-lg font-bold"} px-2 dark:text-dark-2 text-light-2`}>{content}</p>
+            {/* @ts-ignore */}
             {photos?.length > 0 ?
             <div className=" w-full">
               <ImageCard photos={photos} isComment={isComment} />

@@ -1,3 +1,4 @@
+// "use client"
 import ThreadCard from "@/components/cards/ThreadCard";
 import Searchbar from "@/components/shared/Searchbar";
 import { fetchPosts } from "@/lib/actions/thread.actions";
@@ -26,7 +27,10 @@ async function Page({searchParams }) {
      <>
       <h1 className="head-text">Home</h1>
       <Searchbar routeType="/" />
-      <Thread posts={result.posts} next_cursor={result.next_cursor} user={user} userInfo={userInfo}/> 
+      <div className="h-[200vh]">
+
+      <Thread search={search} currentUserId={user.id} currentUser_Id={userInfo._id}/> 
+      </div>
       {/* <section className="mt-3 md:mt-9 flex flex-col w-full gap-2 md:gap-10">
         {result.posts.length === 0 ? (
           <p>No threads found</p>

@@ -67,8 +67,11 @@ async function ThreadsTab({ currentUserId,currentUser_Id, accountId, accountType
   let result: Result | null = null;
   let questions: Question[] = [];
   if (type === "Anonymous") {
+        // @ts-ignore
+
     questions = await fetchUserQuestions(currentUser_Id);
   } else if (type= "Threads") {
+    // @ts-ignore
     result = await fetchUserPosts(accountId);
   }
   // console.log(questions)
@@ -76,7 +79,9 @@ async function ThreadsTab({ currentUserId,currentUser_Id, accountId, accountType
     <section className='mt-9 flex flex-col gap-3'>
       {
         type === "Threads" ? 
+      // @ts-ignore
         result?.length > 0 ?
+      // @ts-ignore
       (result?.map((thread :any) => (
         <ThreadCard
           key={thread._id}
@@ -101,7 +106,9 @@ async function ThreadsTab({ currentUserId,currentUser_Id, accountId, accountType
       ))) : 
       <p className="text-lg font-light ">No Threads</p> 
       : type === "Anonymous" ? 
+          // @ts-ignore
       questions?.length > 0 ?
+          // @ts-ignore
       (questions?.map((question :any)=>(
         <QuestionCard 
           key={question._id}
